@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'ARCADECLASSIC';
+    /*a name to be used later*/
+    src: url('../assets/fonts/ARCADECLASSIC.TTF');
+    /*URL to font*/
+}
+
+/* .nav-wrapper {
+    background-color: black !important;
+} */
