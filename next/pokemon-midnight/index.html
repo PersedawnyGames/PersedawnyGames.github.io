@@ -5,62 +5,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PersedawnyGames</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../../css/font.css">
-    <link rel="stylesheet" href="../../css/flex.css">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .icon-circle {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .icon-black {
+            background-color: black;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="navbar-fixed">
-        <nav>
-            <div class="nav-wrapper black">
-                <a href="../../" class="brand-logo center" style="font-family: ARCADECLASSIC; margin-left: 5px;">
-                    PersedawnyGames
-                </a>
-            </div>
-        </nav>
-    </div>
-
-    <main class="grey">
-        <div class="container">
-            <h4 class="center-align">Pokémon - Midnight: To-Do</h4>
-            <ul class="collection">
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">gamepad</i>
-                    <span class="title">Add more player stats</span>
-                    <p>Implement more stats for the player.</p>
+    <nav class="navbar navbar-light bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="../../" style="font-family: ARCADECLASSIC;">PersedawnyGames</a>
+        </div>
+    </nav>
+    <main class="bg-secondary text-white" style="padding-top: 15px;">
+        <div class="container mt-5">
+            <h4 class="text-center">Planned To-Do List</h4>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">gamepad</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Add bosses</h5>
+                            <p class="mb-0">I'm working on a first boss, and have a pretty clear view on who the final boss will be.</p>
+                        </div>
+                    </div>
                 </li>
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">gamepad</i>
-                    <span class="title">Add more weapons</span>
-                    <p>Design and implement new weapons for an upcoming update.</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">update</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Tweak existing Pokémon</h5>
+                            <p class="mb-0">The spawning of the Pokémon and their stats should be more 'fair'.</p>
+                        </div>
+                    </div>
                 </li>
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">android</i>
-                    <span class="title">Update creatures</span>
-                    <p>HP of monsters should be 'more fair'. Pathfinding should be better and a more random.</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">add</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Add weapons</h5>
+                            <p class="mb-0">Just the Pokéball isn't fun.. is it?</p>
+                        </div>
+                    </div>
                 </li>
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">android</i>
-                    <span class="title">Add more Pokémon</span>
-                    <p>More Pokémon will be added with varying behavior.</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">bug_report</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Add more Pokémon</h5>
+                            <p class="mb-0">I'm thinking about what Pokémon to add and what behavior to give to them.</p>
+                        </div>
+                    </div>
                 </li>
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">leaderboard</i>
-                    <span class="title">Statistics</span>
-                    <p>Implement a statistics screen. More info about this soon... :)</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">leaderboard</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Add statistics</h5>
+                            <p class="mb-0">See how many Pokémon you've slain. There will be fun achievements to gain here!</p>
+                        </div>
+                    </div>
                 </li>
-                <li class="collection-item avatar">
-                    <i class="material-icons circle blue">save</i>
-                    <span class="title">Save your progress</span>
-                    <p>The game should save your progress in between runs.</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-circle icon-black">
+                            <i class="material-icons">save</i>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <h5 class="mb-1">Save game</h5>
+                            <p class="mb-0">This is needed for the previous point.</p>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
     </main>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
