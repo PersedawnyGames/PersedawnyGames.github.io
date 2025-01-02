@@ -59,6 +59,15 @@ body {
     font-size: 18px;
 }
 
+.username a {
+    text-decoration: none;
+    color: #1DA1F2;
+}
+
+.username a:hover {
+    text-decoration: underline;
+}
+
 .time {
     font-size: 14px;
     color: #657786;
