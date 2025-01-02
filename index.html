@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PersedawnyGames</title>
+    <title>Dev Log - Daily Updates</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-
-    <div class="wrapper">
-        <header>
-            <h1>PersedawnyGames</h1>
-            <p>Decks of Destiny Development Log</p>
+    <div class="container">
+        <header class="header">
+            <h1>Persedawny Games</h1>
+            <p>Daily updates about my coding journey</p>
         </header>
+        
+        <div class="tweet">
+            <div class="tweet-header">
+                <span class="username">@Persedawny</span>
+                <span class="time">2 Jan 2025</span>
+            </div>
+            <div class="tweet-body">
+                <p>Sooo… a new year, and this year I wanna actually ‘finish’ a game or app. I need to come back to what ‘finishing’ this game means, but I want to work on it at least a few hours every week (and hopefully close to every day).</p>
 
-        <main>
-            <section class="devlog-updates">
-                <article class="devlog-entry">
-                    <h2>Devlog #1: Early Stages of Development</h2>
-                    <span class="date">September 16, 2024</span>
-                    <p style="margin-top: 5px;">It's been an exciting first week of development! While I'm still in the very early stages, I wanted to share a quick update—if only to look back on it in a few weeks and see how far I've come.</p>
-                    <p style="margin-top: 5px;">This week started with an idea, and now I’m working on small pieces of the game. I also made a significant switch, moving from GameMaker to Unity, which has been a great learning experience so far. There’s still a long road ahead, but I’m proud of the progress I’ve made.</p>
-                    <p style="margin-top: 5px;">At this point, I can select, draw, and 'play' cards in the game. I say ‘play’ loosely, as for now, all that happens is the card leaves your hand. But hey, it's something!</p>
-                    <p style="margin-top: 5px;">Next week, my main goal is to make sure that hands are valid before being played and have a more functional play mechanic.</p>
-                </article>
-            </section>
-        </main>
-
-        <footer>
-            <p>&copy; 2024 PersedawnyGames | All rights reserved | <a style="color: white;" href="https://ko-fi.com/persedawnygames" target="_blank">Support me on Ko-fi</a></p>
-        </footer>
+                <p>There’s two projects:</p>
+                <ul>
+                    <li><strong>Money Manager</strong></li>
+                    <p>The name really says everything. Import bank data -> put them into categories -> manage budgets -> let AI check if this budget is fine or not.</p>
+                    <p>Last year I worked on importing things and the basic functionality for categories. Today I actually made the first real steps for AI.</p>
+                    <li><strong>Your World</strong></li>
+                    <p>I love city builders, so I want to make my own 😊. The first steps were already there, but I put it away and started over. Now, the basic functionalities for the camera are in place. I need to build things like the turn-based system, buildings, and more. At some point, I want to create systems like sickness that could kill off your population, complete with their own screens to track sickness rates.</p>
+                </ul>
+                <p>Today, I worked on the AI for Money Manager. It actually seems to work pretty well. It’s a very simple model that predicts the next month based on all the data in the database at that point. I need to think about what kind of models the app needs. It might be interesting to have different models for short-term and long-term predictions.</p>
+                <p>I also made this site! So YIPPEE!</p>
+            </div>
+        </div>
     </div>
-
 </body>
-
 </html>
