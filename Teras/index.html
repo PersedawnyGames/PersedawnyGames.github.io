@@ -1,21 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <title>Pixel Art Interactive Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      overflow: auto;
+      height: 100%;
+      width: 100%;
     }
 
-    img.stretch-bg {
-      width: 100vw;  /* or any large value to stretch image */
-      display: block;
+    #map {
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .leaflet-overlay-pane img {
       image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
   </style>
 </head>
 <body>
-  <img src="Sprite-0001.png" class="stretch-bg" alt="Background">
+
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    // Use your actual image dimensions here
+    const imageWidth = 1280;  // Replace with your pixel art width
+    const imageHeight = 720;  // Replace with your pixel art height
+
+    // Create the map
+    const map = L.map('map', {
+      crs: L.CRS.Simple,
+      zoomControl: true,
+      minZoom: -2,
+      maxZoom: 4,
+      zoomSnap: 1,
+      zoomDelta: 1,
+      wheelPxPerZoomLevel: 100
+    });
+
+    // Define bounds using image dimensions
+    const bounds = [[0, 0], [imageHeight, imageWidth]];
+
+    // Add your image as the base layer
+    L.imageOverlay('Sprite-0001.png', bounds).addTo(map);
+
+    // Fit to bounds exactly (fills screen)
+    map.fitBounds(bounds);
+
+    // Optional: lock to image bounds so user can't pan away
+    map.setMaxBounds(bounds);
+
+    // Optional: add marker using pixel coords [y, x]
+    L.marker([360, 640]).addTo(map).bindPopup('Center of your pixel map').openPopup();
+  </script>
+
 </body>
 </html>
