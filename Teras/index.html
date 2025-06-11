@@ -63,7 +63,23 @@
     map.setMaxBounds(bounds);
 
     // Optional: add marker using pixel coords [y, x]
-    L.marker([360, 640]).addTo(map).bindPopup('Center of your pixel map').openPopup();
+    L.marker([328, 294]).addTo(map).bindPopup('Brimvale');
+    L.marker([339, 285]).addTo(map).bindPopup("Prof. Hemlock's lab");
+
+    // map.on('click', function (e) {
+    //   const coords = e.latlng; // LatLng in simple CRS is pixels
+    //   const y = coords.lat.toFixed(0);
+    //   const x = coords.lng.toFixed(0);
+
+    //   // Add a marker or popup where clicked
+    //   L.popup()
+    //     .setLatLng([y, x])
+    //     .setContent(`Pixel coordinates: [${x}, ${y}]`)
+    //     .openOn(map);
+
+    //   // For debugging: log to console
+    //   console.log(`Clicked at pixel coords: [${x}, ${y}]`);
+    // });
   </script>
 
 </body>
