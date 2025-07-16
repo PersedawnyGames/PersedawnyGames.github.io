@@ -980,7 +980,6 @@
                     const encrypted = this.crypto.encrypt(saveData);
                     if (encrypted) {
                         localStorage.setItem(this.saveKey, encrypted);
-                        this.showSaveNotification('Game Saved!');
                     }
                 } catch (error) {
                     console.error('Save failed:', error);
