@@ -102,7 +102,8 @@
             gap: 20px;
         }
 
-        /* Mystical Merchant's Orb - Floating Ad System */
+        /* Mystical Merchant's Orb - DISABLED: Ads not implemented yet */
+        /*
         .mystical-orb {
             position: fixed;
             bottom: 30px;
@@ -181,6 +182,7 @@
             text-align: center;
             font-size: 0.9em;
         }
+        */
 
         .header {
             text-align: center;
@@ -440,6 +442,8 @@
         .import-btn { background: #2ecc71; color: white; }
         .delete-btn { background: #e74c3c; color: white; }
 
+        /* Ad system styles - DISABLED: Ads not implemented yet */
+        /*
         .ads-section {
             background: rgba(52, 152, 219, 0.1);
             border: 2px solid #3498db;
@@ -470,6 +474,7 @@
             transform: none;
             box-shadow: none;
         }
+        */
 
         .ascension-section {
             background: rgba(155, 89, 182, 0.1);
@@ -715,6 +720,8 @@
                 grid-template-columns: 1fr;
             }
             
+            /* Mystical orb responsive styles - DISABLED: Ads not implemented yet */
+            /*
             .mystical-orb {
                 bottom: 20px;
                 right: 20px;
@@ -727,6 +734,7 @@
                 right: 20px;
                 min-width: 250px;
             }
+            */"
         }
 
         @media (max-width: 768px) {
@@ -765,6 +773,8 @@
                 min-width: auto;
             }
             
+            /* Mystical orb mobile responsive styles - DISABLED: Ads not implemented yet */
+            /*
             .mystical-orb {
                 width: 50px;
                 height: 50px;
@@ -775,6 +785,7 @@
                 right: 10px;
                 min-width: 200px;
             }
+            */"
         }
     </style>
 </head>
@@ -909,8 +920,8 @@
             </div>
         </div>
 
-        <!-- Mystical Merchant's Orb -->
-        <div class="mystical-orb" id="mysticalOrb"></div>
+        <!-- Mystical Merchant's Orb - DISABLED: Ads not implemented yet -->
+        <!-- <div class="mystical-orb" id="mysticalOrb"></div>
         
         <div class="orb-menu" id="orbMenu">
             <h3>🔮 Mystical Merchant 🔮</h3>
@@ -932,7 +943,7 @@
                     <div style="font-size: 0.8em;" id="clickAdCooldown">Ready!</div>
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <script>
@@ -1364,11 +1375,14 @@
                     // Don't check achievements here - they're already checked in the brewPotion method
                 };
 
+                // Ad watching tracking - DISABLED: Ads not implemented yet
+                /*
                 const originalWatchAd = this.game.watchAd.bind(this.game);
                 this.game.watchAd = (adType) => {
                     this.adsWatched++;
                     originalWatchAd(adType);
                 };
+                */
             }
 
             trackClick() {
@@ -1390,7 +1404,7 @@
                 const achievementData = {
                     unlockedAchievements: Array.from(this.unlockedAchievements),
                     adsWatched: this.adsWatched,
-                    speedTimer: this.speedTimer
+                    speedTimer: this.speedTimepotior
                 };
                 localStorage.setItem('achievementData', JSON.stringify(achievementData));
             }
@@ -1425,13 +1439,15 @@
                 this.masteryBonus = 0;
                 this.achievementMultiplier = 1;
                 this.automationEarned = 0;
+                this.resourceChanceBonus = 0;
+                this.ascensionCost = 10000000;
 
                 // Save system
                 this.crypto = new GameCrypto();
                 this.saveKey = 'potionBrewingSave';
                 this.autoSaveInterval = 30000;
 
-                // Ad system
+                // Ad system - DISABLED: Ads not implemented yet (keeping variables to prevent errors)
                 this.adCooldowns = {
                     gold: 0,
                     resource: 0,
@@ -1445,19 +1461,20 @@
                     manual: [
                         { name: "Silver Spoon", cost: { gold: 25 }, owned: 0, effect: 1, description: "Brewing power +1 per click" },
                         { name: "Crystal Stirrer", cost: { gold: 150 }, owned: 0, effect: 2, description: "Brewing power +2 per click" },
-                        { name: "Mithril Ladle", cost: { gold: 1500, herbs: 100 }, owned: 0, effect: 8, description: "Brewing power +8 per click" },
-                        { name: "Phoenix Feather Wand", cost: { gold: 25000, crystals: 200 }, owned: 0, effect: 35, description: "Brewing power +35 per click" },
-                        { name: "Dragon Scale Catalyst", cost: { gold: 500000, essence: 50 }, owned: 0, effect: 150, description: "Brewing power +150 per click" }
+                        { name: "Mithril Ladle", cost: { gold: 1500, herbs: 100 }, owned: 0, effect: 5, description: "Brewing power +5 per click" },
+                        { name: "Phoenix Feather Wand", cost: { gold: 25000, crystals: 200 }, owned: 0, effect: 15, description: "Brewing power +15 per click" },
+                        { name: "Dragon Scale Catalyst", cost: { gold: 500000, essence: 50 }, owned: 0, effect: 50, description: "Brewing power +50 per click" }
                     ],
                     automation: [
-                        { name: "Apprentice Helper", cost: { gold: 100 }, owned: 0, effect: 1, description: "Generates 1 gold/sec" },
-                        { name: "Brewing Familiar", cost: { gold: 800, herbs: 50 }, owned: 0, effect: 2, description: "Generates 2 gold/sec" },
-                        { name: "Enchanted Cauldron", cost: { gold: 8000, crystals: 75 }, owned: 0, effect: 10, description: "Generates 10 gold/sec" },
-                        { name: "Alchemical Golem", cost: { gold: 100000, essence: 25 }, owned: 0, effect: 50, description: "Generates 50 gold/sec" },
-                        { name: "Arcane Laboratory", cost: { gold: 1500000, essence: 200 }, owned: 0, effect: 250, description: "Generates 250 gold/sec" },
-                        { name: "Dimensional Brewery", cost: { gold: 25000000, essence: 1000 }, owned: 0, effect: 1200, description: "Generates 1200 gold/sec" }
+                        { name: "Apprentice Helper", cost: { gold: 50 }, owned: 0, effect: 2, description: "Generates 2 gold/sec" },
+                        { name: "Brewing Familiar", cost: { gold: 400, herbs: 25 }, owned: 0, effect: 6, description: "Generates 6 gold/sec" },
+                        { name: "Enchanted Cauldron", cost: { gold: 4000, crystals: 40 }, owned: 0, effect: 25, description: "Generates 25 gold/sec" },
+                        { name: "Alchemical Golem", cost: { gold: 50000, essence: 15 }, owned: 0, effect: 100, description: "Generates 100 gold/sec" },
+                        { name: "Arcane Laboratory", cost: { gold: 750000, essence: 100 }, owned: 0, effect: 500, description: "Generates 500 gold/sec" },
+                        { name: "Dimensional Brewery", cost: { gold: 12000000, essence: 500 }, owned: 0, effect: 2500, description: "Generates 2500 gold/sec" }
                     ],
                     arcane: [
+                        { name: "Essence Harvester", cost: { gold: 75 }, owned: 0, effect: 0.01, description: "+1% resource chance per click" },
                         { name: "Herb Transmutation", cost: { gold: 500, herbs: 25 }, owned: 0, effect: 0.05, description: "+5% to all production" },
                         { name: "Crystal Amplification", cost: { gold: 5000, crystals: 50 }, owned: 0, effect: 0.1, description: "+10% to all production" },
                         { name: "Essence Manipulation", cost: { gold: 50000, essence: 15 }, owned: 0, effect: 0.15, description: "+15% to all production" },
@@ -1474,9 +1491,12 @@
                 document.getElementById('cauldron').addEventListener('click', (e) => this.brewPotion(e));
                 document.getElementById('ascensionBtn').addEventListener('click', () => this.ascend());
                 
+                // Ad button event listeners - DISABLED: Ads not implemented yet
+                /*
                 document.getElementById('goldAdBtn').addEventListener('click', () => this.watchAd('gold'));
                 document.getElementById('resourceAdBtn').addEventListener('click', () => this.watchAd('resource'));
                 document.getElementById('clickAdBtn').addEventListener('click', () => this.watchAd('click'));
+                */
                 
                 // Initialize game
                 this.loadGame();
@@ -1496,29 +1516,27 @@
                 // Initialize upgrade tabs
                 this.initializeUpgradeTabs();
                 
-                // Initialize mystical orb
-                this.initializeMysticalOrb();
+                // Initialize mystical orb - DISABLED: Ads not implemented yet
+                // this.initializeMysticalOrb();
             }
 
             brewPotion(e) {
                 let effectiveBrewPower = Math.floor(this.brewPower * (1 + this.masteryBonus / 100));
                 
-                // Apply click frenzy
-                if (this.clickFrenzyActive && Date.now() < this.clickFrenzyEnd) {
-                    effectiveBrewPower *= 3;
-                    document.getElementById('cauldron').classList.add('click-frenzy');
-                } else if (this.clickFrenzyActive) {
-                    this.clickFrenzyActive = false;
-                    document.getElementById('cauldron').classList.remove('click-frenzy');
-                }
+                // Apply click frenzy - DISABLED: Ads not implemented yet
+                // (Click frenzy functionality removed since ads aren't working)
                 
                 this.gold += effectiveBrewPower;
                 this.totalBrewed += effectiveBrewPower;
 
-                // Generate secondary resources
-                if (Math.random() < 0.05) this.herbs += Math.floor(effectiveBrewPower / 10) || 1;
-                if (Math.random() < 0.02) this.crystals += Math.floor(effectiveBrewPower / 25) || 1;
-                if (Math.random() < 0.008) this.essence += Math.floor(effectiveBrewPower / 50) || 1;
+                // Generate secondary resources with bonus chance
+                const herbChance = Math.min(0.05 + this.resourceChanceBonus, 0.5);
+                const crystalChance = Math.min(0.02 + this.resourceChanceBonus * 0.4, 0.3);
+                const essenceChance = Math.min(0.008 + this.resourceChanceBonus * 0.16, 0.15);
+                
+                if (Math.random() < herbChance) this.herbs += Math.floor(effectiveBrewPower / 10) || 1;
+                if (Math.random() < crystalChance) this.crystals += Math.floor(effectiveBrewPower / 25) || 1;
+                if (Math.random() < essenceChance) this.essence += Math.floor(effectiveBrewPower / 50) || 1;
 
                 this.showClickEffect(e, effectiveBrewPower);
                 this.updateDisplay();
@@ -1588,6 +1606,7 @@
             calculateStats() {
                 // Calculate manual brewing power
                 this.brewPower = 1;
+                this.resourceChanceBonus = 0;
                 this.upgrades.manual.forEach(upgrade => {
                     this.brewPower += upgrade.owned * upgrade.effect;
                 });
@@ -1601,7 +1620,11 @@
                 // Apply arcane bonuses
                 let multiplier = 1;
                 this.upgrades.arcane.forEach(upgrade => {
-                    multiplier += upgrade.owned * upgrade.effect;
+                    if (upgrade.name === "Essence Harvester") {
+                        this.resourceChanceBonus += upgrade.owned * upgrade.effect;
+                    } else {
+                        multiplier += upgrade.owned * upgrade.effect;
+                    }
                 });
 
                 this.brewPower = Math.floor(this.brewPower * multiplier);
@@ -1641,12 +1664,12 @@
                 document.getElementById('ascensionBonus').textContent = ascensionBonus;
                 
                 const ascensionBtn = document.getElementById('ascensionBtn');
-                if (this.totalBrewed >= 10000000) {
+                if (this.totalBrewed >= this.ascensionCost) {
                     ascensionBtn.disabled = false;
                     ascensionBtn.textContent = `Ascend to Mastery ${this.masteryLevel + 1} (+${ascensionBonus}% bonus!)`;
                 } else {
                     ascensionBtn.disabled = true;
-                    const needed = this.formatNumber(10000000 - this.totalBrewed);
+                    const needed = this.formatNumber(this.ascensionCost - this.totalBrewed);
                     ascensionBtn.textContent = `Need ${needed} more gold to ascend`;
                 }
             }
@@ -1706,6 +1729,8 @@
                 });
             }
 
+            // Ad watching function - DISABLED: Ads not implemented yet
+            /*
             watchAd(adType) {
                 const currentTime = Date.now();
                 
@@ -1731,7 +1756,10 @@
                     this.updateDisplay();
                 }, 2000);
             }
+            */
 
+            // Ad reward granting function - DISABLED: Ads not implemented yet
+            /*
             grantAdReward(adType) {
                 switch(adType) {
                     case 'gold':
@@ -1761,7 +1789,10 @@
                         break;
                 }
             }
+            */
 
+            // Ad reward notification function - DISABLED: Ads not implemented yet
+            /*
             showAdReward(message) {
                 const reward = document.createElement('div');
                 reward.style.position = 'fixed';
@@ -1781,11 +1812,15 @@
                 document.body.appendChild(reward);
                 setTimeout(() => reward.remove(), 3000);
             }
+            */
 
             ascend() {
-                if (this.totalBrewed >= 10000000) {
+                if (this.totalBrewed >= this.ascensionCost) {
                     this.masteryLevel++;
                     this.masteryBonus = (this.masteryLevel - 1) * 25;
+                    
+                    // Scale ascension cost exponentially
+                    this.ascensionCost = Math.floor(this.ascensionCost * 10);
                     
                     this.gold = 0;
                     this.herbs = 0;
@@ -1830,16 +1865,14 @@
                     this.achievementSystem.checkAchievements();
                 }
                 
-                this.updateAdCooldowns(currentTime);
-                
-                if (this.clickFrenzyActive && currentTime >= this.clickFrenzyEnd) {
-                    this.clickFrenzyActive = false;
-                    document.getElementById('cauldron').classList.remove('click-frenzy');
-                }
+                // Ad cooldown updates and click frenzy - DISABLED: Ads not implemented yet
+                // (Ad functionality removed since ads aren't working)
                 
                 setTimeout(() => this.gameLoop(), 100);
             }
 
+            // Ad cooldown update function - DISABLED: Ads not implemented yet
+            /*
             updateAdCooldowns(currentTime) {
                 Object.keys(this.adCooldowns).forEach(adType => {
                     const button = document.getElementById(adType + 'AdBtn');
@@ -1857,6 +1890,7 @@
                     }
                 });
             }
+            */
 
             saveGame() {
                 try {
@@ -1871,6 +1905,8 @@
                         upgrades: this.upgrades,
                         achievementMultiplier: this.achievementMultiplier,
                         automationEarned: this.automationEarned,
+                        resourceChanceBonus: this.resourceChanceBonus,
+                        ascensionCost: this.ascensionCost,
                         timestamp: Date.now(),
                         version: '1.0'
                     };
@@ -1906,6 +1942,8 @@
                     this.masteryBonus = saveData.masteryBonus || 0;
                     this.achievementMultiplier = saveData.achievementMultiplier || 1;
                     this.automationEarned = saveData.automationEarned || 0;
+                    this.resourceChanceBonus = saveData.resourceChanceBonus || 0;
+                    this.ascensionCost = saveData.ascensionCost || 10000000;
 
                     if (saveData.upgrades) {
                         Object.keys(saveData.upgrades).forEach(category => {
@@ -2029,6 +2067,8 @@
                     this.masteryBonus = 0;
                     this.achievementMultiplier = 1;
                     this.automationEarned = 0;
+                    this.resourceChanceBonus = 0;
+                    this.ascensionCost = 10000000;
                     
                     // Reset all upgrades
                     Object.values(this.upgrades).forEach(category => {
@@ -2077,10 +2117,12 @@
 
             formatNumber(num) {
                 if (num < 1000) return Math.floor(num).toString();
-                if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
-                if (num < 1000000000) return (num / 1000000).toFixed(1) + 'M';
-                if (num < 1000000000000) return (num / 1000000000).toFixed(1) + 'B';
-                return (num / 1000000000000).toFixed(1) + 'T';
+                if (num < 1000000) return (num / 1000).toFixed(2) + 'K';
+                if (num < 1000000000) return (num / 1000000).toFixed(2) + 'M';
+                if (num < 1000000000000) return (num / 1000000000).toFixed(2) + 'B';
+                if (num < 1000000000000000) return (num / 1000000000000).toFixed(2) + 'T';
+                if (num < 1000000000000000000) return (num / 1000000000000000).toFixed(2) + 'Q';
+                return (num / 1000000000000000000).toFixed(2) + 'Qi';
             }
 
             initializeUpgradeTabs() {
@@ -2106,6 +2148,8 @@
                 });
             }
 
+            // Mystical orb initialization - DISABLED: Ads not implemented yet
+            /*
             initializeMysticalOrb() {
                 const orb = document.getElementById('mysticalOrb');
                 const orbMenu = document.getElementById('orbMenu');
@@ -2135,6 +2179,7 @@
                     e.stopPropagation();
                 });
             }
+            */
         }
 
         // Global functions for buttons
