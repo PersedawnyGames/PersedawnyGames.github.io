@@ -107,7 +107,8 @@ class AchievementSystem {
         this.unlockedAchievements = new Set();
         this.clickCounter = 0;
         this.clickTimer = 0;
-        this.speedTimer = 0;
+        this.gameStartTime = Date.now();
+        this.speedAchievementCompleted = false;
         this.adsWatched = 0;
         this.init();
     }
@@ -146,7 +147,7 @@ class AchievementSystem {
                 { id: 'speed_demon', name: 'Speed Demon', description: 'Earn 1M gold in under 10 minutes', tier: 'silver', target: 1000000, reward: 'gold', value: 25000, icon: '⚡' },
                 { id: 'clicker_god', name: 'Clicker God', description: 'Achieve 100 clicks in 10 seconds', tier: 'gold', target: 100, reward: 'multiplier', value: 1.15, icon: '👆' },
                 { id: 'ad_enthusiast', name: 'Ad Enthusiast', description: 'Watch 50 advertisements', tier: 'bronze', target: 50, reward: 'gold', value: 10000, icon: '📺' },
-                { id: 'perfectionist', name: 'Perfectionist', description: 'Complete all other achievements', tier: 'platinum', target: 1, reward: 'multiplier', value: 3.0, icon: '🎯' }
+                { id: 'perfectionist', name: 'Perfectionist', description: 'Complete all other achievements', tier: 'platinum', target: -1, reward: 'multiplier', value: 3.0, icon: '🎯' }
             ]
         };
     }
@@ -220,7 +221,9 @@ class AchievementSystem {
                 return this.game.masteryLevel >= achievement.target;
             
             case 'speed_demon':
-                return this.game.totalBrewed >= achievement.target && (Date.now() - this.speedTimer) <= 600000;
+                if (this.speedAchievementCompleted) return false;
+                const timePlayed = Date.now() - this.gameStartTime;
+                return this.game.totalBrewed >= achievement.target && timePlayed <= 600000;
             
             case 'clicker_god':
                 return this.clickCounter >= achievement.target;
@@ -229,8 +232,9 @@ class AchievementSystem {
                 return this.adsWatched >= achievement.target;
             
             case 'perfectionist':
-                const totalAchievements = Object.values(this.achievements).flat().length - 1;
-                return this.unlockedAchievements.size >= totalAchievements;
+                const allAchievements = Object.values(this.achievements).flat();
+                const otherAchievements = allAchievements.filter(ach => ach.id !== 'perfectionist');
+                return this.unlockedAchievements.size >= otherAchievements.length;
             
             default:
                 return false;
@@ -239,6 +243,12 @@ class AchievementSystem {
 
     unlockAchievement(achievement) {
         this.unlockedAchievements.add(achievement.id);
+        
+        // Mark speed achievement as completed so it can't be earned again
+        if (achievement.id === 'speed_demon') {
+            this.speedAchievementCompleted = true;
+        }
+        
         this.grantReward(achievement);
         this.showNotification(achievement);
         this.updateAchievementUI();
@@ -328,6 +338,7 @@ class AchievementSystem {
 
     getAchievementProgress(achievement) {
         let current = 0;
+        let target = achievement.target;
         
         switch(achievement.id) {
             case 'novice_brewer':
@@ -384,7 +395,12 @@ class AchievementSystem {
                 break;
             
             case 'speed_demon':
-                current = (Date.now() - this.speedTimer) <= 600000 ? this.game.totalBrewed : 0;
+                if (this.speedAchievementCompleted) {
+                    current = achievement.target;
+                } else {
+                    const timePlayed = Date.now() - this.gameStartTime;
+                    current = timePlayed <= 600000 ? this.game.totalBrewed : 0;
+                }
                 break;
             
             case 'clicker_god':
@@ -396,22 +412,39 @@ class AchievementSystem {
                 break;
             
             case 'perfectionist':
-                current = this.unlockedAchievements.size;
+                const allAchievements = Object.values(this.achievements).flat();
+                const otherAchievements = allAchievements.filter(ach => ach.id !== 'perfectionist');
+                current = Math.min(this.unlockedAchievements.size, otherAchievements.length);
+                target = otherAchievements.length;
                 break;
         }
         
-        return (current / achievement.target) * 100;
+        return (current / target) * 100;
     }
 
     formatProgress(achievement, progress) {
+        if (achievement.id === 'perfectionist') {
+            const allAchievements = Object.values(this.achievements).flat();
+            const otherAchievements = allAchievements.filter(ach => ach.id !== 'perfectionist');
+            const current = Math.min(this.unlockedAchievements.size, otherAchievements.length);
+            return `${current} / ${otherAchievements.length}`;
+        }
+        
         const current = Math.floor((progress / 100) * achievement.target);
         return `${this.game.formatNumber(current)} / ${this.game.formatNumber(achievement.target)}`;
     }
 
     updateAchievementStats() {
-        const total = Object.values(this.achievements).flat().length;
+        const allAchievements = Object.values(this.achievements).flat();
+        const total = allAchievements.length;
         const completed = this.unlockedAchievements.size;
-        const percentage = Math.floor((completed / total) * 100);
+        
+        // Don't count perfectionist in percentage calculation unless actually unlocked
+        const perfectionistUnlocked = this.unlockedAchievements.has('perfectionist');
+        const adjustedTotal = perfectionistUnlocked ? total : total - 1;
+        const adjustedCompleted = perfectionistUnlocked ? completed : Math.min(completed, total - 1);
+        
+        const percentage = Math.floor((adjustedCompleted / adjustedTotal) * 100);
         
         document.getElementById('achievementCount').textContent = completed;
         document.getElementById('totalAchievements').textContent = total;
@@ -455,7 +488,8 @@ class AchievementSystem {
         const achievementData = {
             unlockedAchievements: Array.from(this.unlockedAchievements),
             adsWatched: this.adsWatched,
-            speedTimer: this.speedTimer
+            gameStartTime: this.gameStartTime,
+            speedAchievementCompleted: this.speedAchievementCompleted
         };
         localStorage.setItem('achievementData', JSON.stringify(achievementData));
     }
@@ -467,7 +501,8 @@ class AchievementSystem {
                 const achievementData = JSON.parse(data);
                 this.unlockedAchievements = new Set(achievementData.unlockedAchievements || []);
                 this.adsWatched = achievementData.adsWatched || 0;
-                this.speedTimer = achievementData.speedTimer || Date.now();
+                this.gameStartTime = achievementData.gameStartTime || Date.now();
+                this.speedAchievementCompleted = achievementData.speedAchievementCompleted || false;
             } catch (error) {
                 console.error('Failed to load achievements:', error);
             }
@@ -558,7 +593,6 @@ class PotionBrewingGame {
 
         // Initialize achievement system (but don't check achievements on startup)
         this.achievementSystem = new AchievementSystem(this);
-        this.achievementSystem.startSpeedTimer();
 
         // Auto-save setup
         setInterval(() => this.saveGame(), this.autoSaveInterval);
@@ -1131,7 +1165,8 @@ class PotionBrewingGame {
                 this.achievementSystem.unlockedAchievements.clear();
                 this.achievementSystem.adsWatched = 0;
                 this.achievementSystem.clickCounter = 0;
-                this.achievementSystem.speedTimer = Date.now();
+                this.achievementSystem.gameStartTime = Date.now();
+                this.achievementSystem.speedAchievementCompleted = false;
                 this.achievementSystem.updateAchievementUI();
             }
             
