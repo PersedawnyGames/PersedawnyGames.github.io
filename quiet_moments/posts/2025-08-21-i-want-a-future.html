@@ -62,7 +62,7 @@
                     
                     <p>I struggle with separation anxiety. It makes me want to know EVERYTHING that's going on around me, which spawns so many fears in my head. I'm hurting people with the things I do, share, and think. But I want a future, and I can get it. By doing just 1% better each day.</p>
                     
-                    <p>Today I learned something important: emotions trigger behavior, which triggers more emotions. It's a cycle I need to break. I'll try to counter this with a simple exercise: whenever I feel a strong emotion, I'm going to write it down along with how it makes me want to react. Take a deep breath, then let it go.</p>
+                    <p>Today I learned emotions trigger behavior, which triggers more emotions. It's a cycle I need to break. I'll try to counter this with a simple exercise: whenever I feel a strong emotion, I'm going to write it down along with how it makes me want to react. Take a deep breath, then let it go.</p>
                     
                     <p>I also tried the mountain exercise to prepare myself for handling change. And I'm practicing noticing bad thoughts and letting them go instead of feeding them. It's not easy, but it's necessary.</p>
                     
@@ -72,16 +72,22 @@
         </main>
     </div>
 
+    <!-- Inline JavaScript for Chart -->
     <script>
+        /**
+         * Initialize meditation chart for blog post page
+         */
         document.addEventListener('DOMContentLoaded', () => {
             const ctx = document.getElementById('sidebar-meditation-chart');
             if (!ctx) return;
             
+            // Hardcoded meditation data
             const meditationData = [
                 { date: "2025-08-20T12:00:00.000Z", minutes: 21 },
                 { date: "2025-08-21T12:00:00.000Z", minutes: 7 }
             ];
             
+            // Generate chart data for last 7 days
             const chartData = [];
             const today = new Date();
             
@@ -102,6 +108,7 @@
                 });
             }
 
+            // Create chart
             new Chart(ctx, {
                 type: 'line',
                 data: {

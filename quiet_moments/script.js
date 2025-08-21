@@ -1,5 +1,10 @@
+/**
+ * QuietMoments - Meditation Progress Tracker
+ * Displays meditation statistics and progress chart in the sidebar
+ */
 class QuietMoments {
     constructor() {
+        // Hardcoded meditation data
         this.meditationData = [
             {
                 date: "2025-08-20T12:00:00.000Z",
@@ -10,19 +15,29 @@ class QuietMoments {
                 minutes: 7
             }
         ];
+        
         this.sidebarChart = null;
         this.init();
     }
 
+    /**
+     * Initialize the application
+     */
     init() {
         this.bindEvents();
         this.initSidebarChart();
     }
 
+    /**
+     * Bind event handlers (placeholder for future functionality)
+     */
     bindEvents() {
         // No navigation events needed since we only have home section
     }
 
+    /**
+     * Initialize the sidebar meditation progress chart
+     */
     initSidebarChart() {
         const ctx = document.getElementById('sidebar-meditation-chart');
         if (!ctx) return;
@@ -76,6 +91,11 @@ class QuietMoments {
         });
     }
 
+    /**
+     * Generate chart data for the specified number of days
+     * @param {number} days - Number of days to include in chart
+     * @returns {Array} Chart data array
+     */
     getChartData(days) {
         const chartData = [];
         const today = new Date();
@@ -85,10 +105,12 @@ class QuietMoments {
             date.setDate(date.getDate() - i);
             const dateStr = date.toISOString().split('T')[0];
             
+            // Find meditation sessions for this date
             const dayData = this.meditationData.filter(session => 
                 session.date.split('T')[0] === dateStr
             );
             
+            // Sum total minutes for the day
             const totalMinutes = dayData.reduce((sum, session) => sum + session.minutes, 0);
             
             chartData.push({
@@ -101,10 +123,11 @@ class QuietMoments {
         
         return chartData;
     }
-
 }
 
-// Initialize the app when the page loads
+/**
+ * Initialize the application when the DOM is loaded
+ */
 document.addEventListener('DOMContentLoaded', () => {
     window.quietMoments = new QuietMoments();
 });

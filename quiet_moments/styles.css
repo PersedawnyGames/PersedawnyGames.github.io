@@ -1,3 +1,7 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -12,6 +16,10 @@ body {
     color: #333;
 }
 
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -20,6 +28,17 @@ body {
     display: flex;
     gap: 30px;
 }
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
 
 .sidebar {
     width: 320px;
@@ -35,6 +54,7 @@ body {
     backdrop-filter: blur(10px);
 }
 
+/* Sidebar Header */
 .sidebar-header h2 {
     color: #4a5568;
     font-size: 1.5rem;
@@ -64,6 +84,7 @@ body {
     margin-bottom: 1.5rem;
 }
 
+/* Navigation Menu */
 .nav-menu {
     list-style: none;
 }
@@ -109,12 +130,69 @@ body {
     padding: 0.5rem;
 }
 
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    max-width: 100%;
+/* ==========================================================================
+   MEDITATION PROGRESS WIDGET
+   ========================================================================== */
+
+.sidebar-meditation {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
 }
+
+.sidebar-meditation h3 {
+    color: #4a5568;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.meditation-stats-mini {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-mini {
+    flex: 1;
+    text-align: center;
+    background: rgba(102, 126, 234, 0.05);
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.7rem;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value-mini {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #667eea;
+    line-height: 1;
+}
+
+.stat-unit {
+    display: block;
+    font-size: 0.6rem;
+    color: #718096;
+    margin-top: 0.25rem;
+}
+
+.sidebar-chart-container {
+    height: 150px;
+    position: relative;
+}
+
+/* ==========================================================================
+   CONTENT SECTIONS
+   ========================================================================== */
 
 .section {
     display: none;
@@ -141,12 +219,9 @@ body {
     font-weight: 300;
 }
 
-.quote {
-    color: #667eea;
-    font-style: italic;
-    font-size: 1.2rem;
-    font-weight: 300;
-}
+/* ==========================================================================
+   BLOG POSTS
+   ========================================================================== */
 
 .blog-entries {
     display: flex;
@@ -180,21 +255,7 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.post-excerpt {
-    color: #4a5568;
-    line-height: 1.8;
-}
-
-.read-more {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.read-more:hover {
-    text-decoration: underline;
-}
-
+/* Post Header */
 .post-header {
     display: flex;
     justify-content: space-between;
@@ -202,6 +263,7 @@ body {
     margin-bottom: 1rem;
 }
 
+.blog-post h1,
 .blog-post h2 {
     font-size: 1.8rem;
     color: #2d3748;
@@ -224,6 +286,7 @@ body {
     font-size: 0.8rem;
 }
 
+/* Post Content */
 .post-content {
     color: #4a5568;
     line-height: 1.8;
@@ -243,21 +306,24 @@ body {
     margin-bottom: 0;
 }
 
-footer {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin-top: 2rem;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+.post-excerpt {
+    color: #4a5568;
+    line-height: 1.8;
 }
 
-.mindfulness-quote {
-    color: #4a5568;
-    font-style: italic;
-    font-size: 1.1rem;
+.read-more {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
 }
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   MEDITATION TRACKER PAGE (Legacy)
+   ========================================================================== */
 
 .meditation-stats {
     display: grid;
@@ -346,95 +412,29 @@ footer {
     height: 400px;
 }
 
-.sidebar-meditation {
+/* ==========================================================================
+   FOOTER (Legacy)
+   ========================================================================== */
+
+footer {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 15px;
     margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-}
-
-.sidebar-meditation h3 {
-    color: #4a5568;
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    font-weight: 500;
-}
-
-.meditation-stats-mini {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.stat-mini {
-    flex: 1;
     text-align: center;
-    background: rgba(102, 126, 234, 0.05);
-    padding: 0.75rem;
-    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
 }
 
-.stat-label {
-    display: block;
-    font-size: 0.7rem;
-    color: #718096;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.25rem;
+.mindfulness-quote {
+    color: #4a5568;
+    font-style: italic;
+    font-size: 1.1rem;
 }
 
-.stat-value-mini {
-    display: block;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #667eea;
-    line-height: 1;
-}
-
-.stat-unit {
-    display: block;
-    font-size: 0.6rem;
-    color: #718096;
-    margin-top: 0.25rem;
-}
-
-.sidebar-log {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.sidebar-log input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 0.85rem;
-}
-
-.sidebar-log input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.sidebar-log button {
-    padding: 0.5rem 0.75rem;
-    background: #667eea;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.sidebar-log button:hover {
-    background: #5a67d8;
-}
-
-.sidebar-chart-container {
-    height: 150px;
-    position: relative;
-}
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
 
 @media (max-width: 768px) {
     .container {
