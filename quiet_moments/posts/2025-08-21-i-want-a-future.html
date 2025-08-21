@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="../styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="container">
         <nav class="sidebar">
@@ -18,11 +20,11 @@
                 <li><a href="../index.html">Home</a></li>
                 <li class="nav-section">Posts</li>
                 <li><a href="2025-08-21-i-want-a-future.html" class="active">
-                    <span class="post-title">I Want A Future</span>
-                    <span class="post-date">Aug 21, 2025</span>
-                </a></li>
+                        <span class="post-title">I Want A Future</span>
+                        <span class="post-date">Aug 21, 2025</span>
+                    </a></li>
             </ul>
-            
+
             <div class="sidebar-meditation">
                 <h3>Meditation Progress</h3>
                 <div class="meditation-stats-mini">
@@ -37,7 +39,7 @@
                         <span class="stat-unit">days</span>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-chart-container">
                     <canvas id="sidebar-meditation-chart"></canvas>
                 </div>
@@ -55,18 +57,31 @@
                 </header>
                 <div class="post-content">
                     <p>August 20th 2025, the start of my journey.</p>
-                    
-                    <p>I've been doing some deep thinking about what I want to achieve on this journey. My goal is clear but challenging: to become a mentally stable person who can manage fears and anxieties, someone who handles situations without letting fear control her life.</p>
-                    
-                    <p>Why does this matter so much to me? I need to be in control of my life and emotions to build lasting relationships. I realize I've been pushing people away by oversharing my intense emotions and fears. I get paranoid at the slightest hint something might be happening, and this costs me energy while hurting their trust in me.</p>
-                    
-                    <p>I struggle with separation anxiety. It makes me want to know EVERYTHING that's going on around me, which spawns so many fears in my head. I'm hurting people with the things I do, share, and think. But I want a future, and I can get it. By doing just 1% better each day.</p>
-                    
-                    <p>Today I learned emotions trigger behavior, which triggers more emotions. It's a cycle I need to break. I'll try to counter this with a simple exercise: whenever I feel a strong emotion, I'm going to write it down along with how it makes me want to react. Take a deep breath, then let it go.</p>
-                    
-                    <p>I also tried the mountain exercise to prepare myself for handling change. And I'm practicing noticing bad thoughts and letting them go instead of feeding them. It's not easy, but it's necessary.</p>
-                    
-                    <p>The reminder that keeps me grounded: I can take care of myself in small ways.<br>This journey doesn't require perfection, just progress, one small step at a time.</p>
+
+                    <p>I've been doing some deep thinking about what I want to achieve on this journey. My goal is clear
+                        but challenging: to become a mentally stable person who can manage fears and anxieties, someone
+                        who handles situations without letting fear control her life.</p>
+
+                    <p>Why does this matter so much to me? I need to be in control of my life and emotions to build
+                        lasting relationships. I realize I've been pushing people away by oversharing my intense
+                        emotions and fears. I get paranoid at the slightest hint something might be happening, and this
+                        costs me energy while hurting their trust in me.</p>
+
+                    <p>I struggle with separation anxiety. It makes me want to know EVERYTHING that's going on around
+                        me, which spawns so many fears in my head. I'm hurting people with the things I do, share, and
+                        think. But I want a future, and I can get it. By doing just 1% better each day.</p>
+
+                    <p>Today I learned emotions trigger behavior, which triggers more emotions. It's a cycle I need to
+                        break. I'm going to counter this with a simple exercise: whenever I feel a strong emotion, I'm
+                        going to write it down along with how it makes me want to react. Take a deep breath, then let it
+                        go.</p>
+
+                    <p>I also tried the mountain exercise to prepare myself for handling change. And I'm practicing
+                        noticing bad thoughts and letting them go instead of feeding them. It's not easy, but it's
+                        necessary.</p>
+
+                    <p>The reminder that keeps me going: I can take care of myself in small ways.<br>This journey
+                        doesn't require perfection, just progress, one small step at a time.</p>
                 </div>
             </article>
         </main>
@@ -80,28 +95,28 @@
         document.addEventListener('DOMContentLoaded', () => {
             const ctx = document.getElementById('sidebar-meditation-chart');
             if (!ctx) return;
-            
+
             // Hardcoded meditation data
             const meditationData = [
                 { date: "2025-08-20T12:00:00.000Z", minutes: 21 },
                 { date: "2025-08-21T12:00:00.000Z", minutes: 7 }
             ];
-            
+
             // Generate chart data for last 7 days
             const chartData = [];
             const today = new Date();
-            
+
             for (let i = 6; i >= 0; i--) {
                 const date = new Date(today);
                 date.setDate(date.getDate() - i);
                 const dateStr = date.toISOString().split('T')[0];
-                
-                const dayData = meditationData.filter(session => 
+
+                const dayData = meditationData.filter(session =>
                     session.date.split('T')[0] === dateStr
                 );
-                
+
                 const totalMinutes = dayData.reduce((sum, session) => sum + session.minutes, 0);
-                
+
                 chartData.push({
                     minutes: totalMinutes,
                     dateLabel: date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
@@ -157,4 +172,5 @@
         });
     </script>
 </body>
+
 </html>
