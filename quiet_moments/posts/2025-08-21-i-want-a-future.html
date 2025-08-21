@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I Want A Future - Quiet Moments</title>
     <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../components/meditation-widget.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -25,24 +26,7 @@
                     </a></li>
             </ul>
 
-            <div class="sidebar-meditation">
-                <h3>Meditation Progress</h3>
-                <div class="meditation-stats-mini">
-                    <div class="stat-mini">
-                        <span class="stat-label">Total</span>
-                        <span class="stat-value-mini">28</span>
-                        <span class="stat-unit">min</span>
-                    </div>
-                    <div class="stat-mini">
-                        <span class="stat-label">Streak</span>
-                        <span class="stat-value-mini">2</span>
-                        <span class="stat-unit">days</span>
-                    </div>
-                </div>
-
-                <div class="sidebar-chart-container">
-                    <canvas id="sidebar-meditation-chart"></canvas>
-                </div>
+            <div class="sidebar-meditation" id="post-meditation-widget">
             </div>
         </nav>
 
@@ -87,87 +71,13 @@
         </main>
     </div>
 
-    <!-- Inline JavaScript for Chart -->
+    <script src="../components/meditation-widget.js"></script>
     <script>
-        /**
-         * Initialize meditation chart for blog post page
-         */
         document.addEventListener('DOMContentLoaded', () => {
-            const ctx = document.getElementById('sidebar-meditation-chart');
-            if (!ctx) return;
-
-            // Hardcoded meditation data
-            const meditationData = [
-                { date: "2025-08-20T12:00:00.000Z", minutes: 21 },
-                { date: "2025-08-21T12:00:00.000Z", minutes: 7 }
-            ];
-
-            // Generate chart data for last 7 days
-            const chartData = [];
-            const today = new Date();
-
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-
-                const dayData = meditationData.filter(session =>
-                    session.date.split('T')[0] === dateStr
-                );
-
-                const totalMinutes = dayData.reduce((sum, session) => sum + session.minutes, 0);
-
-                chartData.push({
-                    minutes: totalMinutes,
-                    dateLabel: date.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric' })
-                });
-            }
-
-            // Create chart
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: chartData.map(day => day.dateLabel),
-                    datasets: [{
-                        label: 'Minutes',
-                        data: chartData.map(day => day.minutes),
-                        borderColor: '#667eea',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        borderWidth: 1.5,
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            display: true,
-                            ticks: {
-                                font: {
-                                    size: 10
-                                }
-                            }
-                        },
-                        x: {
-                            display: true,
-                            ticks: {
-                                font: {
-                                    size: 9
-                                },
-                                maxRotation: 45
-                            }
-                        }
-                    }
-                }
+            new MeditationWidget('post-meditation-widget', {
+                showChart: true,
+                showStats: true,
+                chartDays: 7
             });
         });
     </script>

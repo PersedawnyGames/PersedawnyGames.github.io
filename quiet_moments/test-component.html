@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Test - Quiet Moments</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components/meditation-widget.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <main class="main-content">
+            <h1>Meditation Widget Component Test</h1>
+            
+            <div style="max-width: 400px; margin: 20px 0;">
+                <h2>Full Widget (Chart + Stats)</h2>
+                <div id="widget-full"></div>
+            </div>
+            
+            <div style="max-width: 400px; margin: 20px 0;">
+                <h2>Stats Only</h2>
+                <div id="widget-stats-only"></div>
+            </div>
+            
+            <div style="max-width: 400px; margin: 20px 0;">
+                <h2>Chart Only</h2>
+                <div id="widget-chart-only"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="components/meditation-widget.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Full widget
+            new MeditationWidget('widget-full', {
+                showChart: true,
+                showStats: true,
+                chartDays: 7
+            });
+            
+            // Stats only
+            new MeditationWidget('widget-stats-only', {
+                showChart: false,
+                showStats: true
+            });
+            
+            // Chart only
+            new MeditationWidget('widget-chart-only', {
+                showChart: true,
+                showStats: false,
+                chartDays: 14
+            });
+        });
+    </script>
+</body>
+</html>
