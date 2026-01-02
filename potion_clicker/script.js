@@ -109,7 +109,6 @@ class AchievementSystem {
         this.clickTimer = 0;
         this.gameStartTime = Date.now();
         this.speedAchievementCompleted = false;
-        this.adsWatched = 0;
         this.init();
     }
 
@@ -146,7 +145,6 @@ class AchievementSystem {
             special: [
                 { id: 'speed_demon', name: 'Speed Demon', description: 'Earn 1M gold in under 10 minutes', tier: 'silver', target: 1000000, reward: 'gold', value: 25000, icon: '⚡' },
                 { id: 'clicker_god', name: 'Clicker God', description: 'Achieve 100 clicks in 10 seconds', tier: 'gold', target: 100, reward: 'multiplier', value: 1.15, icon: '👆' },
-                { id: 'ad_enthusiast', name: 'Ad Enthusiast', description: 'Watch 50 advertisements', tier: 'bronze', target: 50, reward: 'gold', value: 10000, icon: '📺' },
                 { id: 'perfectionist', name: 'Perfectionist', description: 'Complete all other achievements', tier: 'platinum', target: -1, reward: 'multiplier', value: 3.0, icon: '🎯' }
             ]
         };
@@ -227,10 +225,7 @@ class AchievementSystem {
             
             case 'clicker_god':
                 return this.clickCounter >= achievement.target;
-            
-            case 'ad_enthusiast':
-                return this.adsWatched >= achievement.target;
-            
+
             case 'perfectionist':
                 const allAchievements = Object.values(this.achievements).flat();
                 const otherAchievements = allAchievements.filter(ach => ach.id !== 'perfectionist');
@@ -406,11 +401,7 @@ class AchievementSystem {
             case 'clicker_god':
                 current = this.clickCounter;
                 break;
-            
-            case 'ad_enthusiast':
-                current = this.adsWatched;
-                break;
-            
+
             case 'perfectionist':
                 const allAchievements = Object.values(this.achievements).flat();
                 const otherAchievements = allAchievements.filter(ach => ach.id !== 'perfectionist');
@@ -458,15 +449,6 @@ class AchievementSystem {
             originalBrewPotion(e);
             // Don't check achievements here - they're already checked in the brewPotion method
         };
-
-        // Ad watching tracking - DISABLED: Ads not implemented yet
-        /*
-        const originalWatchAd = this.game.watchAd.bind(this.game);
-        this.game.watchAd = (adType) => {
-            this.adsWatched++;
-            originalWatchAd(adType);
-        };
-        */
     }
 
     trackClick() {
@@ -487,7 +469,6 @@ class AchievementSystem {
     saveAchievements() {
         const achievementData = {
             unlockedAchievements: Array.from(this.unlockedAchievements),
-            adsWatched: this.adsWatched,
             gameStartTime: this.gameStartTime,
             speedAchievementCompleted: this.speedAchievementCompleted
         };
@@ -500,7 +481,6 @@ class AchievementSystem {
             try {
                 const achievementData = JSON.parse(data);
                 this.unlockedAchievements = new Set(achievementData.unlockedAchievements || []);
-                this.adsWatched = achievementData.adsWatched || 0;
                 this.gameStartTime = achievementData.gameStartTime || Date.now();
                 this.speedAchievementCompleted = achievementData.speedAchievementCompleted || false;
             } catch (error) {
@@ -532,15 +512,6 @@ class PotionBrewingGame {
         this.crypto = new GameCrypto();
         this.saveKey = 'potionBrewingSave';
         this.autoSaveInterval = 30000;
-
-        // Ad system - DISABLED: Ads not implemented yet (keeping variables to prevent errors)
-        this.adCooldowns = {
-            gold: 0,
-            resource: 0,
-            click: 0
-        };
-        this.clickFrenzyActive = false;
-        this.clickFrenzyEnd = 0;
 
         // Upgrade definitions
         this.upgrades = {
@@ -576,14 +547,7 @@ class PotionBrewingGame {
         // Event listeners
         document.getElementById('cauldron').addEventListener('click', (e) => this.brewPotion(e));
         document.getElementById('ascensionBtn').addEventListener('click', () => this.ascend());
-        
-        // Ad button event listeners - DISABLED: Ads not implemented yet
-        /*
-        document.getElementById('goldAdBtn').addEventListener('click', () => this.watchAd('gold'));
-        document.getElementById('resourceAdBtn').addEventListener('click', () => this.watchAd('resource'));
-        document.getElementById('clickAdBtn').addEventListener('click', () => this.watchAd('click'));
-        */
-        
+
         // Initialize game
         this.loadGame();
         this.calculateStats();
@@ -597,20 +561,14 @@ class PotionBrewingGame {
         // Auto-save setup
         setInterval(() => this.saveGame(), this.autoSaveInterval);
         window.addEventListener('beforeunload', () => this.saveGame());
-        
+
         // Initialize upgrade tabs
         this.initializeUpgradeTabs();
-        
-        // Initialize mystical orb - DISABLED: Ads not implemented yet
-        // this.initializeMysticalOrb();
     }
 
     brewPotion(e) {
         let effectiveBrewPower = Math.floor(this.brewPower * (1 + this.masteryBonus / 100));
-        
-        // Apply click frenzy - DISABLED: Ads not implemented yet
-        // (Click frenzy functionality removed since ads aren't working)
-        
+
         this.gold += effectiveBrewPower;
         this.totalBrewed += effectiveBrewPower;
 
@@ -814,91 +772,6 @@ class PotionBrewingGame {
         });
     }
 
-    // Ad watching function - DISABLED: Ads not implemented yet
-    /*
-    watchAd(adType) {
-        const currentTime = Date.now();
-        
-        if (this.adCooldowns[adType] > currentTime) {
-            return;
-        }
-        
-        const button = document.getElementById(adType + 'AdBtn');
-        button.disabled = true;
-        button.style.opacity = '0.5';
-        
-        const cooldownEl = document.getElementById(adType + 'AdCooldown');
-        cooldownEl.textContent = 'Watching...';
-        
-        setTimeout(() => {
-            this.grantAdReward(adType);
-            
-            const cooldownTimes = { gold: 10 * 60 * 1000, resource: 20 * 60 * 1000, click: 30 * 60 * 1000 };
-            this.adCooldowns[adType] = currentTime + cooldownTimes[adType];
-            
-            button.disabled = false;
-            button.style.opacity = '1';
-            this.updateDisplay();
-        }, 2000);
-    }
-    */
-
-    // Ad reward granting function - DISABLED: Ads not implemented yet
-    /*
-    grantAdReward(adType) {
-        switch(adType) {
-            case 'gold':
-                const goldBonus = this.goldPerSecond * 1 * 60 * 60;
-                this.gold += goldBonus;
-                this.totalBrewed += goldBonus;
-                this.showAdReward(`+${this.formatNumber(goldBonus)} Gold!`);
-                break;
-                
-            case 'resource':
-                const herbBonus = Math.max(20, this.goldPerSecond * 3);
-                const crystalBonus = Math.max(8, this.goldPerSecond * 1.5);
-                const essenceBonus = Math.max(3, this.goldPerSecond * 0.5);
-                
-                this.herbs += herbBonus;
-                this.crystals += crystalBonus;
-                this.essence += essenceBonus;
-                
-                this.showAdReward(`Resources Pack Received!`);
-                break;
-                
-            case 'click':
-                this.clickFrenzyActive = true;
-                this.clickFrenzyEnd = Date.now() + 20000;
-                document.getElementById('cauldron').classList.add('click-frenzy');
-                this.showAdReward(`Click Frenzy Activated!`);
-                break;
-        }
-    }
-    */
-
-    // Ad reward notification function - DISABLED: Ads not implemented yet
-    /*
-    showAdReward(message) {
-        const reward = document.createElement('div');
-        reward.style.position = 'fixed';
-        reward.style.top = '50%';
-        reward.style.left = '50%';
-        reward.style.transform = 'translate(-50%, -50%)';
-        reward.style.background = 'linear-gradient(45deg, #3498db, #2980b9)';
-        reward.style.color = 'white';
-        reward.style.padding = '20px 30px';
-        reward.style.borderRadius = '15px';
-        reward.style.fontSize = '1.5em';
-        reward.style.fontWeight = 'bold';
-        reward.style.zIndex = '1000';
-        reward.style.boxShadow = '0 0 30px rgba(52, 152, 219, 0.6)';
-        reward.textContent = message;
-        
-        document.body.appendChild(reward);
-        setTimeout(() => reward.remove(), 3000);
-    }
-    */
-
     ascend() {
         if (this.totalBrewed >= this.ascensionCost) {
             this.masteryLevel++;
@@ -949,33 +822,9 @@ class PotionBrewingGame {
         if (this.achievementSystem) {
             this.achievementSystem.checkAchievements();
         }
-        
-        // Ad cooldown updates and click frenzy - DISABLED: Ads not implemented yet
-        // (Ad functionality removed since ads aren't working)
-        
+
         setTimeout(() => this.gameLoop(), 100);
     }
-
-    // Ad cooldown update function - DISABLED: Ads not implemented yet
-    /*
-    updateAdCooldowns(currentTime) {
-        Object.keys(this.adCooldowns).forEach(adType => {
-            const button = document.getElementById(adType + 'AdBtn');
-            const cooldownEl = document.getElementById(adType + 'AdCooldown');
-            
-            if (this.adCooldowns[adType] > currentTime) {
-                const remaining = Math.ceil((this.adCooldowns[adType] - currentTime) / 1000);
-                const minutes = Math.floor(remaining / 60);
-                const seconds = remaining % 60;
-                cooldownEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                button.disabled = true;
-            } else {
-                cooldownEl.textContent = 'Ready!';
-                button.disabled = false;
-            }
-        });
-    }
-    */
 
     saveGame() {
         try {
@@ -1163,7 +1012,6 @@ class PotionBrewingGame {
             // Reset achievement system
             if (this.achievementSystem) {
                 this.achievementSystem.unlockedAchievements.clear();
-                this.achievementSystem.adsWatched = 0;
                 this.achievementSystem.clickCounter = 0;
                 this.achievementSystem.gameStartTime = Date.now();
                 this.achievementSystem.speedAchievementCompleted = false;
@@ -1233,39 +1081,6 @@ class PotionBrewingGame {
             });
         });
     }
-
-    // Mystical orb initialization - DISABLED: Ads not implemented yet
-    /*
-    initializeMysticalOrb() {
-        const orb = document.getElementById('mysticalOrb');
-        const orbMenu = document.getElementById('orbMenu');
-        let isMenuOpen = false;
-        
-        orb.addEventListener('click', (e) => {
-            e.stopPropagation();
-            isMenuOpen = !isMenuOpen;
-            
-            if (isMenuOpen) {
-                orbMenu.classList.add('show');
-            } else {
-                orbMenu.classList.remove('show');
-            }
-        });
-        
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!orbMenu.contains(e.target) && !orb.contains(e.target)) {
-                isMenuOpen = false;
-                orbMenu.classList.remove('show');
-            }
-        });
-        
-        // Prevent menu from closing when clicking inside it
-        orbMenu.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
-    }
-    */
 }
 
 // Global functions for buttons

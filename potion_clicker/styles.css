@@ -95,88 +95,6 @@ body {
     gap: 20px;
 }
 
-/* Mystical Merchant's Orb - DISABLED: Ads not implemented yet */
-/*
-.mystical-orb {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle at 30% 30%, #ffd700, #ff6b9d, #9b59b6);
-    border-radius: 50%;
-    border: 3px solid #ffd700;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-    cursor: pointer;
-    z-index: 1000;
-    animation: orbFloat 3s ease-in-out infinite, orbGlow 2s ease-in-out infinite alternate;
-    transition: all 0.3s ease;
-}
-
-.mystical-orb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
-}
-
-.mystical-orb::before {
-    content: '🔮';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    animation: orbSpin 4s linear infinite;
-}
-
-@keyframes orbFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes orbGlow {
-    0% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
-    100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 107, 157, 0.4); }
-}
-
-@keyframes orbSpin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.orb-menu {
-    position: fixed;
-    bottom: 120px;
-    right: 30px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 2px solid #ffd700;
-    border-radius: 15px;
-    padding: 20px;
-    min-width: 300px;
-    z-index: 1001;
-    transform: translateX(100%);
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.orb-menu.show {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-.orb-menu h3 {
-    color: #ffd700;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.orb-menu p {
-    color: #d4c4ac;
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 0.9em;
-}
-*/
-
 .header {
     text-align: center;
     margin-bottom: 30px;
@@ -435,40 +353,6 @@ body {
 .import-btn { background: #2ecc71; color: white; }
 .delete-btn { background: #e74c3c; color: white; }
 
-/* Ad system styles - DISABLED: Ads not implemented yet */
-/*
-.ads-section {
-    background: rgba(52, 152, 219, 0.1);
-    border: 2px solid #3498db;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.ad-button {
-    background: linear-gradient(45deg, #f39c12, #e67e22);
-    border: none;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    min-width: 150px;
-    margin: 5px;
-}
-
-.ad-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
-}
-
-.ad-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-*/
-
 .ascension-section {
     background: rgba(155, 89, 182, 0.1);
     border: 2px solid #9b59b6;
@@ -712,22 +596,6 @@ body {
     .achievement-categories {
         grid-template-columns: 1fr;
     }
-    
-    /* Mystical orb responsive styles - DISABLED: Ads not implemented yet */
-    /*
-    .mystical-orb {
-        bottom: 20px;
-        right: 20px;
-        width: 60px;
-        height: 60px;
-    }
-    
-    .orb-menu {
-        bottom: 90px;
-        right: 20px;
-        min-width: 250px;
-    }
-    */
 }
 
 @media (max-width: 768px) {
@@ -765,18 +633,4 @@ body {
     .achievement-stats div {
         min-width: auto;
     }
-    
-    /* Mystical orb mobile responsive styles - DISABLED: Ads not implemented yet */
-    /*
-    .mystical-orb {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .orb-menu {
-        bottom: 70px;
-        right: 10px;
-        min-width: 200px;
-    }
-    */
 }
