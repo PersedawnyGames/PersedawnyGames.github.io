@@ -3,361 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persedawny</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: #00ff41;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Matrix-style background animation */
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.1;
-        }
-
-        .matrix-char {
-            position: absolute;
-            font-size: 14px;
-            color: #00ff41;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-100vh); opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
-        /* Main container */
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* Terminal window */
-        .terminal {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #00ff41;
-            border-radius: 10px;
-            padding: 20px;
-            max-width: 800px;
-            width: 100%;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .terminal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #00ff41;
-        }
-
-        .terminal-title {
-            font-size: 18px;
-            color: #00ff41;
-        }
-
-        .terminal-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-circle {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .btn-red { background: #ff5555; }
-        .btn-yellow { background: #ffff55; }
-        .btn-green { background: #55ff55; }
-
-        /* Logo and title */
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo h1 {
-            font-size: 3em;
-            color: #00ff41;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
-            margin-bottom: 10px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(0, 255, 65, 0.8); }
-            to { text-shadow: 0 0 30px rgba(0, 255, 65, 1), 0 0 40px rgba(0, 255, 65, 0.8); }
-        }
-
-        .subtitle {
-            font-size: 1.2em;
-            color: #888;
-            margin-bottom: 10px;
-        }
-
-        /* Command prompt styling */
-        .prompt {
-            margin: 20px 0;
-            font-size: 16px;
-        }
-
-        .prompt-line {
-            margin: 5px 0;
-        }
-
-        .prompt-symbol {
-            color: #00ff41;
-        }
-
-        .cursor {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* Game button */
-        .game-button {
-            background: linear-gradient(45deg, #00ff41, #00cc33);
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-family: 'Courier New', monospace;
-            color: #000;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            box-shadow: 0 4px 15px rgba(0, 255, 65, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .game-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 255, 65, 0.5);
-            background: linear-gradient(45deg, #00cc33, #00ff41);
-        }
-
-        .game-button:active {
-            transform: translateY(0);
-        }
-
-        .game-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .game-button:hover::before {
-            left: 100%;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .logo h1 {
-                font-size: 2em;
-            }
-            
-            .terminal {
-                padding: 15px;
-                margin: 10px;
-            }
-            
-            .game-button {
-                padding: 12px 24px;
-                font-size: 16px;
-            }
-        }
-
-        /* Glitch effect for fun */
-        .glitch {
-            animation: glitch 0.3s linear infinite;
-        }
-
-        @keyframes glitch {
-            2%, 64% { transform: translate(2px, 0) skew(0deg); }
-            4%, 60% { transform: translate(-2px, 0) skew(0deg); }
-            62% { transform: translate(0, 0) skew(5deg); }
-        }
-
-    </style>
+    <title>Persedawny - Indie Developer</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="matrix-bg" id="matrixBg"></div>
-    
-    <div class="container">
-        <div class="terminal">
-            <div class="terminal-header">
-                <div class="terminal-title">persedawny:~$</div>
-                <div class="terminal-buttons">
-                    <div class="btn-circle btn-red"></div>
-                    <div class="btn-circle btn-yellow"></div>
-                    <div class="btn-circle btn-green"></div>
-                </div>
-            </div>
-            
-            <div class="logo">
-                <h1 id="mainTitle">PERSEDAWNY.DEV</h1>
-                <div class="subtitle">// Independent developer</div>
-            </div>
-            
-            <div class="prompt">
-                <div class="prompt-line">
-                    <span class="prompt-symbol">$</span> ls -la games/
-                </div>
-                <div class="prompt-line">
-                    total 2
-                </div>
-                <div class="prompt-line">
-                    drwxr-xr-x 2 dev dev 4096 Jul 16 21:50 potion_clicker/
-                </div>
-                <div class="prompt-line">
-                    drwxr-xr-x 2 dev dev 4096 Jul 16 21:50 your_world/
-                </div>
-                <div class="prompt-line">
-                    <span class="prompt-symbol">$</span> ./launch_game<span class="cursor">_</span>
-                </div>
-            </div>
-            
-            <div style="text-align: center;">
-                <a href="https://persedawny.dev/potion_clicker/" class="game-button" id="potionBtn">
-                    🧪 Launch Potion Clicker
-                </a>
-            </div>
+    <div class="bg-animated"></div>
 
-            <div style="text-align: center;">
-                <a href="https://persedawny.dev/your_world/" class="game-button" id="potionBtn">
-                    🏗️ To Your World
-                </a>
-            </div>
-            
-            
-            <div class="footer">
-                <p>// Built with HTML, CSS & JavaScript</p>
-                <p>// More games in development</p>
+    <header>
+        <div class="logo">PERSEDAWNY.DEV</div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="nav">
+            <a href="#home">Home</a>
+            <a href="#projects">Projects</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>
+                Hi, I'm <span class="gradient-text">Persedawny</span>
+            </h1>
+            <p>
+                Indie developer creating games and software that bring ideas to life.
+            </p>
+            <div class="cta-buttons">
+                <a href="#projects" class="btn btn-primary">View My Work</a>
             </div>
         </div>
-    </div>
+    </section>
 
-    <script>
-        // Matrix rain effect
-        function createMatrixRain() {
-            const matrixBg = document.getElementById('matrixBg');
-            const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-            
-            function createChar() {
-                const char = document.createElement('div');
-                char.className = 'matrix-char';
-                char.textContent = chars[Math.floor(Math.random() * chars.length)];
-                char.style.left = Math.random() * 100 + 'vw';
-                char.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                char.style.fontSize = (Math.random() * 10 + 10) + 'px';
-                
-                matrixBg.appendChild(char);
-                
-                setTimeout(() => {
-                    char.remove();
-                }, 5000);
-            }
-            
-            setInterval(createChar, 100);
-        }
-        
-        // Typing effect for cursor
-        let cursorVisible = true;
-        setInterval(() => {
-            const cursor = document.querySelector('.cursor');
-            if (cursor) {
-                cursor.style.opacity = cursorVisible ? '0' : '1';
-                cursorVisible = !cursorVisible;
-            }
-        }, 500);
-        
-        // Random glitch effect
-        function randomGlitch() {
-            const title = document.getElementById('mainTitle');
-            if (Math.random() < 0.1) { // 10% chance
-                title.classList.add('glitch');
-                setTimeout(() => {
-                    title.classList.remove('glitch');
-                }, 300);
-            }
-        }
-        
-        // Button click effect
-        document.getElementById('potionBtn').addEventListener('click', function(e) {
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-        });
-        
-        // Initialize effects
-        createMatrixRain();
-        setInterval(randomGlitch, 3000);
-        
-        // Console easter egg
-        console.log(`
-╔══════════════════════════════════════╗
-║     Welcome to Persedawny Games!     ║
-║                                      ║
-║       Thanks for visiting!           ║
-║                                      ║
-╚══════════════════════════════════════╝
-        `);
-    </script>
-    
+    <section id="projects">
+        <div class="section-header">
+            <h2>My Projects</h2>
+            <p>Games, tools, and experiments I've built</p>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Potion Clicker Game -->
+            <div class="project-card show" data-category="games">
+                <div class="project-image">🧪</div>
+                <div class="project-content">
+                    <span class="project-category">Game</span>
+                    <h3>Potion Clicker</h3>
+                    <p>An addictive idle clicker game where you brew potions, unlock upgrades, and build your magical empire. Click your way to becoming the ultimate alchemist!</p>
+                    <div class="project-tags">
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">HTML5</span>
+                        <span class="tag">Incremental</span>
+                    </div>
+                    <a href="potion_clicker/" class="project-link">
+                        Play Now →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://github.com/PersedawnyGames" target="_blank" title="GitHub">💻</a>
+            <a href="https://ko-fi.com/persedawny" target="_blank" title="Ko-fi">☕</a>
+        </div>
+        <p>&copy; 2026 Persedawny</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+
     <!-- Ko-fi Floating Widget -->
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
     <script>
       kofiWidgetOverlay.draw('persedawny', {
         'type': 'floating-chat',
         'floating-chat.donateButton.text': 'Support me',
-        'floating-chat.donateButton.background-color': '#00ff41',
-        'floating-chat.donateButton.text-color': '#000'
+        'floating-chat.donateButton.background-color': '#6366f1',
+        'floating-chat.donateButton.text-color': '#fff'
       });
     </script>
 </body>
