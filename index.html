@@ -10,7 +10,10 @@
     <div class="bg-animated"></div>
 
     <header>
-        <div class="logo">PERSEDAWNY.DEV</div>
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <span>Persedawny</span>
+        </div>
         <div class="menu-toggle" onclick="toggleMenu()">
             <span></span>
             <span></span>
@@ -42,63 +45,174 @@
             <p>Games, tools, and experiments I've built</p>
         </div>
 
+        <!-- Mobile filter buttons -->
         <div class="filter-buttons">
             <button class="filter-btn active" data-filter="all">All</button>
             <button class="filter-btn" data-filter="games">Games</button>
             <button class="filter-btn" data-filter="apps">Apps</button>
+            <button class="filter-btn" data-filter="plugins">Plugins</button>
         </div>
 
+        <!-- Mobile: single column with filters -->
         <div class="projects-grid" id="projectsGrid">
-            <!-- Potion Clicker Game -->
-            <div class="project-card show" data-category="games">
-                <div class="project-image">🧪</div>
+            <!-- AetherForge Plugin -->
+            <div class="project-card show" data-category="plugins">
+                <div class="card-header">
+                    <div class="card-icon">⚔️</div>
+                    <h3>Aether Forge</h3>
+                </div>
                 <div class="project-content">
-                    <span class="project-category">Game</span>
-                    <h3>Potion Clicker</h3>
-                    <p>An addictive idle clicker game where you brew potions, unlock upgrades, and build your magical empire. Click your way to becoming the ultimate alchemist!</p>
+                    <p>A plugin pack for RPG Maker MZ.<br>Currently features Smithy Upgrades - a simple weapon upgrade system to enhance your game's crafting mechanics.</p>
                     <div class="project-tags">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">HTML5</span>
-                        <span class="tag">Incremental</span>
+                        <span class="tag">Plugin</span>
+                        <span class="tag">RPG Maker MZ</span>
                     </div>
-                    <a href="potion_clicker/" class="project-link">
-                        Play Now →
+                </div>
+                <div class="card-footer">
+                    <a href="https://persedawnygames.itch.io/aetherforge" target="_blank" class="project-link">
+                        View on itch.io →
                     </a>
                 </div>
             </div>
 
             <!-- Your World Game -->
             <div class="project-card show" data-category="games">
-                <div class="project-image">🌍</div>
-                <div class="project-content">
-                    <span class="project-category">Game</span>
+                <div class="card-header">
+                    <div class="card-icon">🌍</div>
                     <h3>Your World</h3>
-                    <p>A new adventure awaits. More details coming soon as development progresses.</p>
+                </div>
+                <div class="project-content">
+                    <p>Build and manage your own medieval city. Gather resources, construct buildings, and watch your settlement thrive.</p>
                     <div class="project-tags">
-                        <span class="tag">In Development</span>
-                        <span class="tag">TBA</span>
+                        <span class="tag">GameMaker</span>
                     </div>
-                    <a href="#" class="project-link" style="pointer-events: none; opacity: 0.6;">
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="project-link disabled">
                         Coming Soon
+                    </a>
+                </div>
+            </div>
+
+            <!-- Potion Clicker Game -->
+            <div class="project-card show" data-category="games">
+                <div class="card-header">
+                    <div class="card-icon">🧪</div>
+                    <h3>Potion Clicker</h3>
+                </div>
+                <div class="project-content">
+                    <p>An addictive idle clicker game where you brew potions, unlock upgrades, and build your magical empire. Click your way to becoming the ultimate alchemist!</p>
+                    <div class="project-tags">
+                        <span class="tag">Web Game</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="potion_clicker/" class="project-link">
+                        Play Now →
                     </a>
                 </div>
             </div>
 
             <!-- MoneyManager App -->
             <div class="project-card show" data-category="apps">
-                <div class="project-image">💰</div>
-                <div class="project-content">
-                    <span class="project-category">App</span>
+                <div class="card-header">
+                    <div class="card-icon">💰</div>
                     <h3>MoneyManager</h3>
+                </div>
+                <div class="project-content">
                     <p>A simple and intuitive app to track your expenses and income. Stay on top of your finances with ease.</p>
                     <div class="project-tags">
-                        <span class="tag">Finance</span>
-                        <span class="tag">Productivity</span>
-                        <span class="tag">TBA</span>
+                        <span class="tag">Windows</span>
                     </div>
-                    <a href="#" class="project-link" style="pointer-events: none; opacity: 0.6;">
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="project-link disabled">
                         Coming Soon
                     </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop: 3 category columns -->
+        <div class="projects-columns">
+            <div class="category-column">
+                <h3 class="column-header">Plugins</h3>
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">⚔️</div>
+                        <h3>Aether Forge</h3>
+                    </div>
+                    <div class="project-content">
+                        <p>A plugin pack for RPG Maker MZ.<br>Currently features Smithy Upgrades - a simple weapon upgrade system.</p>
+                        <div class="project-tags">
+                            <span class="tag">Plugin</span>
+                            <span class="tag">RPG Maker MZ</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://persedawnygames.itch.io/aetherforge" target="_blank" class="project-link">
+                            View on itch.io →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-column">
+                <h3 class="column-header">Games</h3>
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">🌍</div>
+                        <h3>Your World</h3>
+                    </div>
+                    <div class="project-content">
+                        <p>Build and manage your own medieval city. Gather resources and watch your settlement thrive.</p>
+                        <div class="project-tags">
+                            <span class="tag">GameMaker</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="project-link disabled">
+                            Coming Soon
+                        </a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">🧪</div>
+                        <h3>Potion Clicker</h3>
+                    </div>
+                    <div class="project-content">
+                        <p>An addictive idle clicker game where you brew potions and build your magical empire!</p>
+                        <div class="project-tags">
+                            <span class="tag">Web Game</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="potion_clicker/" class="project-link">
+                            Play Now →
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-column">
+                <h3 class="column-header">Apps</h3>
+                <div class="project-card">
+                    <div class="card-header">
+                        <div class="card-icon">💰</div>
+                        <h3>MoneyManager</h3>
+                    </div>
+                    <div class="project-content">
+                        <p>A simple app to track your expenses and income. Stay on top of your finances.</p>
+                        <div class="project-tags">
+                            <span class="tag">Windows</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="#" class="project-link disabled">
+                            Coming Soon
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
