@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiative Bot - Documentation | Persedawny</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Docs-specific additions, layered on top of the site's base styles */
+        .docs-section {
+            max-width: 900px;
+        }
+
+        .docs-section > p {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .docs-section code {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        .docs-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .docs-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .docs-card p, .docs-card li {
+            color: var(--text-gray);
+            font-size: 0.98rem;
+            line-height: 1.7;
+        }
+
+        .docs-card ul {
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .role-pills {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .role-pill {
+            padding: 0.6rem 1.25rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .role-pill.tank { background: rgba(20, 184, 166, 0.15); color: var(--accent); }
+        .role-pill.healer { background: rgba(236, 72, 153, 0.15); color: var(--secondary); }
+        .role-pill.dps { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+
+        .docs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .docs-table th, .docs-table td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .docs-table th {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Command reference */
+        .command-group {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .command-group-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.25rem;
+        }
+
+        .command-name {
+            display: inline-block;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .command-group-header p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .subcommand {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.15);
+        }
+
+        .subcommand-name {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .subcommand-name .command-name {
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--secondary);
+            font-size: 0.95rem;
+        }
+
+        .subcommand-name span.desc {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .option-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+        }
+
+        .option-table th, .option-table td {
+            text-align: left;
+            padding: 0.6rem 0.9rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            vertical-align: top;
+        }
+
+        .option-table th {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .option-table code {
+            font-weight: 600;
+        }
+
+        .opt-badge {
+            display: inline-block;
+            padding: 0.2rem 0.65rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .opt-badge.required {
+            background: rgba(236, 72, 153, 0.15);
+            color: var(--secondary);
+        }
+
+        .opt-badge.optional {
+            background: rgba(148, 163, 184, 0.15);
+            color: var(--text-gray);
+        }
+
+        .option-note {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animated"></div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">P</div>
+            <span>Persedawny</span>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="nav">
+            <a href="../index.html">Home</a>
+            <a href="#how-it-works">How it Works</a>
+            <a href="#commands">Commands</a>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>
+                <span class="gradient-text">Initiative Bot</span>
+            </h1>
+            <p>
+                A Discord bot built for the Initiative FFXIV guild — reaction-based raid signups, automatic party
+                formation, and signup times that show correctly in every viewer's own timezone.
+            </p>
+            <div class="cta-buttons">
+                <a href="../index.html" class="btn btn-primary">← Back to Home</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="docs-section" id="how-it-works">
+        <div class="section-header" style="text-align:left; margin-bottom: 1.5rem;">
+            <h2>How Signups Work</h2>
+        </div>
+        <div class="docs-card">
+            <h3>React to sign up</h3>
+            <p>Each signup sheet has three custom emoji reactions, one per role:</p>
+            <div class="role-pills">
+                <span class="role-pill tank">🛡️ Tank</span>
+                <span class="role-pill healer">✨ Healer</span>
+                <span class="role-pill dps">⚔️ DPS</span>
+            </div>
+            <ul>
+                <li>Reacting adds you to that role's list on the embed, in the order you signed up.</li>
+                <li>Reacting with a different role automatically removes your old reaction and moves you over —
+                    you can only hold one role at a time.</li>
+                <li>Removing your reaction removes you from the sheet entirely.</li>
+                <li>Signups stay open to everyone regardless of party size — role caps are only applied when
+                    parties are formed at close time.</li>
+            </ul>
+        </div>
+        <div class="docs-card">
+            <h3>Party formation</h3>
+            <p>
+                When a raid is closed, signups are bin-packed into parties by role, first-come-first-served, filling
+                one party completely for a role before spilling into the next:
+            </p>
+            <table class="docs-table">
+                <thead>
+                    <tr><th>Size</th><th>Tank</th><th>Healer</th><th>DPS</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Small Party (4)</td><td>1</td><td>1</td><td>2</td></tr>
+                    <tr><td>Full Party (8)</td><td>2</td><td>2</td><td>4</td></tr>
+                    <tr><td>Alliance Raid (24)</td><td>6</td><td>6</td><td>12</td></tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 0.75rem;">
+                Half-empty final parties are fine — a new party only opens once the previous one is full for that
+                role. The formed parties are posted either to the configured party-announcements channel, or as a
+                reply if none is set.
+            </p>
+        </div>
+        <div class="docs-card">
+            <h3>Timezone-aware scheduling</h3>
+            <p>
+                Raid times are entered as a date, time, and the organizer's own timezone. The bot converts that to a
+                single point in time and renders it with Discord's native timestamp formatting, so every member
+                sees the raid time and countdown in their own local time automatically — no manual conversion
+                needed. Timezones are fixed UTC offsets rather than DST-aware, so it's worth double-checking times
+                that straddle a DST switchover.
+            </p>
+        </div>
+    </section>
+
+    <section class="docs-section" id="commands">
+        <div class="section-header" style="text-align:left; margin-bottom: 1.5rem;">
+            <h2>Slash Commands</h2>
+        </div>
+
+        <div class="command-group">
+            <div class="command-group-header">
+                <span class="command-name">/raid</span>
+                <p>Raid event signups</p>
+            </div>
+
+            <div class="subcommand">
+                <div class="subcommand-name">
+                    <span class="command-name">create</span>
+                    <span class="desc">Post a new raid signup sheet</span>
+                </div>
+                <table class="option-table">
+                    <thead>
+                        <tr><th>Option</th><th></th><th>Details</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>title</code></td><td><span class="opt-badge required">Required</span></td><td>Name of the raid event</td></tr>
+                        <tr><td><code>size</code></td><td><span class="opt-badge required">Required</span></td><td>Small Party (4), Full Party (8), or Alliance Raid (24)</td></tr>
+                        <tr><td><code>date</code></td><td><span class="opt-badge optional">Optional</span></td><td>Date, as DD-MM-YYYY</td></tr>
+                        <tr><td><code>time</code></td><td><span class="opt-badge optional">Optional</span></td><td>Time, 24h as HH:MM</td></tr>
+                        <tr><td><code>timezone</code></td><td><span class="opt-badge optional">Optional</span></td><td>Your timezone, so the time shows correctly for everyone else</td></tr>
+                        <tr><td><code>image</code></td><td><span class="opt-badge optional">Optional</span></td><td>Banner image for the signup sheet</td></tr>
+                    </tbody>
+                </table>
+                <p class="option-note">If you set a time, <code>date</code>, <code>time</code>, and <code>timezone</code> must all be given together.</p>
+            </div>
+
+            <div class="subcommand">
+                <div class="subcommand-name">
+                    <span class="command-name">edit</span>
+                    <span class="desc">Update a raid's title, time, size, or image</span>
+                </div>
+                <table class="option-table">
+                    <thead>
+                        <tr><th>Option</th><th></th><th>Details</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>id</code></td><td><span class="opt-badge required">Required</span></td><td>Raid ID, shown in the footer of the signup embed</td></tr>
+                        <tr><td><code>title</code></td><td><span class="opt-badge optional">Optional</span></td><td>New title</td></tr>
+                        <tr><td><code>size</code></td><td><span class="opt-badge optional">Optional</span></td><td>New party size</td></tr>
+                        <tr><td><code>date</code> / <code>time</code> / <code>timezone</code></td><td><span class="opt-badge optional">Optional</span></td><td>New raid time — give all three together to change it</td></tr>
+                        <tr><td><code>image</code></td><td><span class="opt-badge optional">Optional</span></td><td>New banner image</td></tr>
+                    </tbody>
+                </table>
+                <p class="option-note">Leave an option blank to keep it unchanged — only what you fill in gets updated.</p>
+            </div>
+
+            <div class="subcommand">
+                <div class="subcommand-name">
+                    <span class="command-name">close</span>
+                    <span class="desc">Close signups and form parties from who signed up</span>
+                </div>
+                <table class="option-table">
+                    <thead>
+                        <tr><th>Option</th><th></th><th>Details</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>id</code></td><td><span class="opt-badge required">Required</span></td><td>Raid ID, shown in the footer of the signup embed</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="command-group">
+            <div class="command-group-header">
+                <span class="command-name">/settings</span>
+                <p>Bot configuration</p>
+            </div>
+
+            <div class="subcommand">
+                <div class="subcommand-name">
+                    <span class="command-name">set-party-channel</span>
+                    <span class="desc">Choose the channel where formed parties get posted</span>
+                </div>
+                <table class="option-table">
+                    <thead>
+                        <tr><th>Option</th><th></th><th>Details</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>channel</code></td><td><span class="opt-badge required">Required</span></td><td>Text channel for party announcements</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="../index.html" title="Back to Home">🏠</a>
+        </div>
+        <p>&copy; 2026 Persedawny</p>
+    </footer>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
