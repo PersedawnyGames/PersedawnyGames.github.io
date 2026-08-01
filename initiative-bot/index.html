@@ -8,6 +8,10 @@
     <style>
         /* Docs-specific additions, layered on top of the site's base styles */
         .docs-section {
+            max-width: 1100px;
+        }
+
+        .docs-section.narrow {
             max-width: 900px;
         }
 
@@ -24,6 +28,44 @@
             font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             color: var(--text-light);
             font-size: 0.9em;
+        }
+
+        .docs-subtitle {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-top: -1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Scroll-reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero badges */
+        .hero-badges {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.75rem;
+        }
+
+        .hero-badge {
+            padding: 0.55rem 1.1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-gray);
         }
 
         .docs-card {
@@ -69,6 +111,7 @@
         .role-pill.tank { background: rgba(20, 184, 166, 0.15); color: var(--accent); }
         .role-pill.healer { background: rgba(236, 72, 153, 0.15); color: var(--secondary); }
         .role-pill.dps { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+        .role-pill.join { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
 
         .docs-table {
             width: 100%;
@@ -89,62 +132,188 @@
             font-weight: 600;
         }
 
-        /* Command reference */
-        .command-group {
+        .callout {
+            display: flex;
+            gap: 0.85rem;
+            align-items: flex-start;
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            border-radius: 14px;
+            padding: 1.1rem 1.3rem;
+            margin-top: 1rem;
+        }
+
+        .callout .callout-icon {
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .callout p {
+            color: var(--text-light) !important;
+            font-size: 0.92rem !important;
+            margin: 0 !important;
+        }
+
+        /* ===== Command Explorer ===== */
+        .command-explorer {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.75rem;
+            align-items: start;
+        }
+
+        .command-sidebar {
             background: var(--bg-card);
             border-radius: 20px;
-            padding: 2rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            position: sticky;
+            top: 110px;
+            min-width: 0;
         }
 
-        .command-group-header {
-            display: flex;
-            align-items: baseline;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 0.25rem;
-        }
-
-        .command-name {
-            display: inline-block;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-            background: rgba(99, 102, 241, 0.15);
-            color: var(--primary);
-            padding: 0.35rem 0.75rem;
-            border-radius: 8px;
-            font-size: 1.05rem;
-            font-weight: 700;
-        }
-
-        .command-group-header p {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-        }
-
-        .subcommand {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed rgba(255, 255, 255, 0.15);
-        }
-
-        .subcommand-name {
-            display: flex;
-            align-items: baseline;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            margin-bottom: 0.5rem;
-        }
-
-        .subcommand-name .command-name {
-            background: rgba(236, 72, 153, 0.15);
-            color: var(--secondary);
-            font-size: 0.95rem;
-        }
-
-        .subcommand-name span.desc {
-            color: var(--text-gray);
+        .command-search {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(0, 0, 0, 0.25);
+            color: var(--text-light);
             font-size: 0.9rem;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .command-search:focus {
+            border-color: var(--primary);
+        }
+
+        .command-search::placeholder {
+            color: var(--text-gray);
+        }
+
+        .command-group-label {
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            color: var(--text-gray);
+            margin: 1.1rem 0 0.4rem 0.6rem;
+        }
+
+        .command-group-label:first-of-type {
+            margin-top: 0.25rem;
+        }
+
+        .command-list-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: background 0.15s ease, border-color 0.15s ease;
+            min-width: 0;
+        }
+
+        .command-list-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .command-list-item .slash {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
+        }
+
+        .command-list-item .snippet {
+            font-size: 0.76rem;
+            color: var(--text-gray);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            min-width: 0;
+        }
+
+        .command-list-item[data-group="raid"].active { background: rgba(99, 102, 241, 0.14); border-left-color: var(--primary); }
+        .command-list-item[data-group="team"].active { background: rgba(236, 72, 153, 0.14); border-left-color: var(--secondary); }
+        .command-list-item[data-group="event"].active { background: rgba(20, 184, 166, 0.14); border-left-color: var(--accent); }
+        .command-list-item[data-group="settings"].active { background: rgba(148, 163, 184, 0.14); border-left-color: var(--text-gray); }
+
+        .command-empty-state {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .command-detail {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            min-height: 360px;
+            animation: detailFade 0.25s ease;
+        }
+
+        @keyframes detailFade {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .command-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .slash-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+        }
+
+        .slash-badge[data-group="raid"] { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
+        .slash-badge[data-group="team"] { background: rgba(236, 72, 153, 0.15); color: var(--secondary); }
+        .slash-badge[data-group="event"] { background: rgba(20, 184, 166, 0.15); color: var(--accent); }
+        .slash-badge[data-group="settings"] { background: rgba(148, 163, 184, 0.15); color: var(--text-gray); }
+
+        .copy-btn {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-gray);
+            padding: 0.4rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .command-detail-summary {
+            color: var(--text-gray);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .option-table {
@@ -155,7 +324,7 @@
 
         .option-table th, .option-table td {
             text-align: left;
-            padding: 0.6rem 0.9rem;
+            padding: 0.65rem 0.9rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             font-size: 0.9rem;
             color: var(--text-gray);
@@ -165,7 +334,7 @@
         .option-table th {
             color: var(--text-light);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.03em;
         }
@@ -178,8 +347,9 @@
             display: inline-block;
             padding: 0.2rem 0.65rem;
             border-radius: 50px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
+            white-space: nowrap;
         }
 
         .opt-badge.required {
@@ -192,11 +362,35 @@
             color: var(--text-gray);
         }
 
-        .option-note {
-            margin-top: 0.75rem;
-            font-size: 0.85rem;
+        .command-notes {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .command-note {
+            display: flex;
+            gap: 0.6rem;
+            font-size: 0.88rem;
             color: var(--text-gray);
-            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .command-note::before {
+            content: '→';
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 900px) {
+            .command-explorer {
+                grid-template-columns: 1fr;
+            }
+
+            .command-sidebar {
+                position: static;
+            }
         }
     </style>
 </head>
@@ -226,38 +420,49 @@
                 <span class="gradient-text">Initiative Bot</span>
             </h1>
             <p>
-                A Discord bot built for the Initiative FFXIV guild — reaction-based raid signups, automatic party
-                formation, and signup times that show correctly in every viewer's own timezone.
+                A Discord bot built for the Initiative guild — reaction-based signups for raids, teams, and plain
+                events, automatic party and team formation, and times that show correctly in every viewer's own
+                timezone.
             </p>
-            <div class="cta-buttons">
+            <div class="hero-badges">
+                <span class="hero-badge">🎲 Raids</span>
+                <span class="hero-badge">🤝 Teams</span>
+                <span class="hero-badge">📅 Events</span>
+                <span class="hero-badge">🌍 Per-viewer timezones</span>
+            </div>
+            <div class="cta-buttons" style="margin-top: 1.75rem;">
                 <a href="../index.html" class="btn btn-primary">← Back to Home</a>
             </div>
         </div>
     </section>
 
     <section class="docs-section" id="how-it-works">
-        <div class="section-header" style="text-align:left; margin-bottom: 1.5rem;">
+        <div class="section-header" style="text-align:left; margin-bottom: 0.5rem;">
             <h2>How Signups Work</h2>
         </div>
-        <div class="docs-card">
-            <h3>React to sign up</h3>
-            <p>Each signup sheet has three custom emoji reactions, one per role:</p>
+        <p class="docs-subtitle">There are three kinds of signup sheet — raids, teams, and plain events — all built and closed the same way.</p>
+
+        <div class="docs-card reveal">
+            <h3>Reacting to sign up</h3>
+            <p>Raids use three custom role emoji; teams and events use a single join reaction:</p>
             <div class="role-pills">
                 <span class="role-pill tank">🛡️ Tank</span>
                 <span class="role-pill healer">✨ Healer</span>
                 <span class="role-pill dps">⚔️ DPS</span>
+                <span class="role-pill join">✅ Join (teams &amp; events)</span>
             </div>
             <ul>
-                <li>Reacting adds you to that role's list on the embed, in the order you signed up.</li>
-                <li>Reacting with a different role automatically removes your old reaction and moves you over —
-                    you can only hold one role at a time.</li>
+                <li>Reacting adds you to the sheet in the order you signed up.</li>
+                <li>On a raid, reacting with a different role automatically removes your old reaction and moves
+                    you over — you can only hold one role at a time.</li>
                 <li>Removing your reaction removes you from the sheet entirely.</li>
-                <li>Signups stay open to everyone regardless of party size — role caps are only applied when
-                    parties are formed at close time.</li>
+                <li>Signups stay open to everyone regardless of size — caps and grouping are only applied when the
+                    sheet is closed.</li>
             </ul>
         </div>
-        <div class="docs-card">
-            <h3>Party formation</h3>
+
+        <div class="docs-card reveal">
+            <h3>Party formation <span style="color: var(--text-gray); font-weight: 400; font-size: 0.85rem;">— raids</span></h3>
             <p>
                 When a raid is closed, signups are bin-packed into parties by role, first-come-first-served, filling
                 one party completely for a role before spilling into the next:
@@ -274,110 +479,55 @@
             </table>
             <p style="margin-top: 0.75rem;">
                 Half-empty final parties are fine — a new party only opens once the previous one is full for that
-                role. The formed parties are posted either to the configured party-announcements channel, or as a
-                reply if none is set.
+                role.
             </p>
         </div>
-        <div class="docs-card">
+
+        <div class="docs-card reveal">
+            <h3>Team formation <span style="color: var(--text-gray); font-weight: 400; font-size: 0.85rem;">— teams</span></h3>
+            <p>
+                Closing a team sheet splits signups by join order. Give it a team <code>size</code> when you create
+                it and teams fill up sequentially, one at a time (a half-empty last team is fine). Leave
+                <code>size</code> out and it splits everyone evenly into exactly 2 teams, round-robin.
+            </p>
+        </div>
+
+        <div class="docs-card reveal">
+            <h3>Attendance <span style="color: var(--text-gray); font-weight: 400; font-size: 0.85rem;">— events</span></h3>
+            <p>
+                Events don't get grouped at all. Closing one just posts the full list of everyone who reacted — a
+                simple "who's coming" roster.
+            </p>
+        </div>
+
+        <div class="docs-card reveal">
             <h3>Timezone-aware scheduling</h3>
             <p>
-                Raid times are entered as a date, time, and the organizer's own timezone. The bot converts that to a
-                single point in time and renders it with Discord's native timestamp formatting, so every member
-                sees the raid time and countdown in their own local time automatically — no manual conversion
-                needed. Timezones are fixed UTC offsets rather than DST-aware, so it's worth double-checking times
-                that straddle a DST switchover.
+                Raid, team, and event times are all entered the same way: a date, a time, and the organizer's own
+                timezone. The bot converts that to a single point in time and renders it with Discord's native
+                timestamp formatting, so every member sees the time and countdown in their own local time
+                automatically — no manual conversion needed. Timezones are fixed UTC offsets rather than
+                DST-aware, so it's worth double-checking times that straddle a DST switchover.
             </p>
+            <div class="callout">
+                <span class="callout-icon">💡</span>
+                <p>Whichever type you're creating, one command closes it: <code>/raid close</code> works for raids, teams, and events alike — see the Commands section below.</p>
+            </div>
         </div>
     </section>
 
     <section class="docs-section" id="commands">
-        <div class="section-header" style="text-align:left; margin-bottom: 1.5rem;">
+        <div class="section-header" style="text-align:left; margin-bottom: 0.5rem;">
             <h2>Slash Commands</h2>
         </div>
+        <p class="docs-subtitle">Pick a command on the left to see what it does and every option it takes.</p>
 
-        <div class="command-group">
-            <div class="command-group-header">
-                <span class="command-name">/raid</span>
-                <p>Raid event signups</p>
+        <div class="command-explorer">
+            <div class="command-sidebar">
+                <input type="text" class="command-search" id="commandSearch" placeholder="Search commands...">
+                <div id="commandList"></div>
             </div>
-
-            <div class="subcommand">
-                <div class="subcommand-name">
-                    <span class="command-name">create</span>
-                    <span class="desc">Post a new raid signup sheet</span>
-                </div>
-                <table class="option-table">
-                    <thead>
-                        <tr><th>Option</th><th></th><th>Details</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>title</code></td><td><span class="opt-badge required">Required</span></td><td>Name of the raid event</td></tr>
-                        <tr><td><code>size</code></td><td><span class="opt-badge required">Required</span></td><td>Small Party (4), Full Party (8), or Alliance Raid (24)</td></tr>
-                        <tr><td><code>date</code></td><td><span class="opt-badge optional">Optional</span></td><td>Date, as DD-MM-YYYY</td></tr>
-                        <tr><td><code>time</code></td><td><span class="opt-badge optional">Optional</span></td><td>Time, 24h as HH:MM</td></tr>
-                        <tr><td><code>timezone</code></td><td><span class="opt-badge optional">Optional</span></td><td>Your timezone, so the time shows correctly for everyone else</td></tr>
-                        <tr><td><code>image</code></td><td><span class="opt-badge optional">Optional</span></td><td>Banner image for the signup sheet</td></tr>
-                    </tbody>
-                </table>
-                <p class="option-note">If you set a time, <code>date</code>, <code>time</code>, and <code>timezone</code> must all be given together.</p>
-            </div>
-
-            <div class="subcommand">
-                <div class="subcommand-name">
-                    <span class="command-name">edit</span>
-                    <span class="desc">Update a raid's title, time, size, or image</span>
-                </div>
-                <table class="option-table">
-                    <thead>
-                        <tr><th>Option</th><th></th><th>Details</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>id</code></td><td><span class="opt-badge required">Required</span></td><td>Raid ID, shown in the footer of the signup embed</td></tr>
-                        <tr><td><code>title</code></td><td><span class="opt-badge optional">Optional</span></td><td>New title</td></tr>
-                        <tr><td><code>size</code></td><td><span class="opt-badge optional">Optional</span></td><td>New party size</td></tr>
-                        <tr><td><code>date</code> / <code>time</code> / <code>timezone</code></td><td><span class="opt-badge optional">Optional</span></td><td>New raid time — give all three together to change it</td></tr>
-                        <tr><td><code>image</code></td><td><span class="opt-badge optional">Optional</span></td><td>New banner image</td></tr>
-                    </tbody>
-                </table>
-                <p class="option-note">Leave an option blank to keep it unchanged — only what you fill in gets updated.</p>
-            </div>
-
-            <div class="subcommand">
-                <div class="subcommand-name">
-                    <span class="command-name">close</span>
-                    <span class="desc">Close signups and form parties from who signed up</span>
-                </div>
-                <table class="option-table">
-                    <thead>
-                        <tr><th>Option</th><th></th><th>Details</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>id</code></td><td><span class="opt-badge required">Required</span></td><td>Raid ID, shown in the footer of the signup embed</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="command-group">
-            <div class="command-group-header">
-                <span class="command-name">/settings</span>
-                <p>Bot configuration</p>
-            </div>
-
-            <div class="subcommand">
-                <div class="subcommand-name">
-                    <span class="command-name">set-party-channel</span>
-                    <span class="desc">Choose the channel where formed parties get posted</span>
-                </div>
-                <table class="option-table">
-                    <thead>
-                        <tr><th>Option</th><th></th><th>Details</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>channel</code></td><td><span class="opt-badge required">Required</span></td><td>Text channel for party announcements</td></tr>
-                    </tbody>
-                </table>
-            </div>
+            <div class="command-detail" id="commandDetail"></div>
         </div>
     </section>
 
@@ -389,5 +539,224 @@
     </footer>
 
     <script src="../js/main.js"></script>
+    <script>
+        const GROUP_META = {
+            raid: { label: 'Raid', icon: '🎲' },
+            team: { label: 'Team', icon: '🤝' },
+            event: { label: 'Event', icon: '📅' },
+            settings: { label: 'Settings', icon: '⚙️' },
+        };
+
+        const COMMANDS = [
+            {
+                id: 'raid-create',
+                group: 'raid',
+                slash: '/raid create',
+                summary: 'Post a new raid signup sheet with role-based reactions.',
+                options: [
+                    { name: 'title', required: true, details: 'Name of the raid event' },
+                    { name: 'size', required: true, details: 'Small Party (4), Full Party (8), or Alliance Raid (24)' },
+                    { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
+                    { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
+                    { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    { name: 'image', required: false, details: 'Banner image for the signup sheet' },
+                ],
+                notes: [
+                    'If you set a time, date, time, and timezone must all be given together.',
+                    'The bot reacts with the Tank/Healer/DPS emoji automatically once the sheet is posted.',
+                ],
+            },
+            {
+                id: 'raid-edit',
+                group: 'raid',
+                slash: '/raid edit',
+                summary: "Update a raid's title, time, size, or image after it's posted.",
+                options: [
+                    { name: 'id', required: true, details: 'Raid ID, shown in the footer of the signup embed' },
+                    { name: 'title', required: false, details: 'New title' },
+                    { name: 'size', required: false, details: 'New party size' },
+                    { name: 'date / time / timezone', required: false, details: 'New raid time — give all three together to change it' },
+                    { name: 'image', required: false, details: 'New banner image' },
+                ],
+                notes: ['Leave an option blank to keep it unchanged — only what you fill in gets updated.'],
+            },
+            {
+                id: 'raid-close',
+                group: 'raid',
+                slash: '/raid close',
+                summary: 'Close signups and show the results — the universal closer for raids, teams, and events.',
+                options: [
+                    { name: 'id', required: true, details: 'Event ID, shown in the footer of the signup embed' },
+                ],
+                notes: [
+                    'This is the one command that closes everything — raids, teams, and events all close with /raid close, there\'s no separate /team close or /event close.',
+                    'Raids form parties by role, teams get split into teams, and events just show the full attendee list.',
+                    'Results post to the channel set with /settings set-party-channel, or reply inline if none is set.',
+                ],
+            },
+            {
+                id: 'team-create',
+                group: 'team',
+                slash: '/team create',
+                summary: 'Post a new team signup sheet — no roles, just one join reaction.',
+                options: [
+                    { name: 'title', required: true, details: 'Name of the event' },
+                    { name: 'size', required: false, details: 'People per team — omit to split everyone evenly into 2 teams' },
+                    { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
+                    { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
+                    { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    { name: 'image', required: false, details: 'Banner image for the signup sheet' },
+                ],
+                notes: [
+                    'Everyone reacts with the same ✅ — there are no roles to pick.',
+                    'Close it with /raid close to split signups into teams.',
+                ],
+            },
+            {
+                id: 'event-create',
+                group: 'event',
+                slash: '/event create',
+                summary: 'Post a plain attendance sheet — no roles, no teams.',
+                options: [
+                    { name: 'title', required: true, details: 'Name of the event' },
+                    { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
+                    { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
+                    { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    { name: 'image', required: false, details: 'Banner image for the signup sheet' },
+                ],
+                notes: [
+                    'Good for a simple "who\'s coming" list — react with ✅ to attend.',
+                    'Close it with /raid close to see the final attendee list.',
+                ],
+            },
+            {
+                id: 'settings-set-party-channel',
+                group: 'settings',
+                slash: '/settings set-party-channel',
+                summary: 'Choose the channel where closed-sheet results get posted.',
+                options: [
+                    { name: 'channel', required: true, details: 'Text channel for raid/team/event results' },
+                ],
+                notes: ['Applies per server — set it once and every /raid close in that server posts its results there.'],
+            },
+        ];
+
+        const listEl = document.getElementById('commandList');
+        const detailEl = document.getElementById('commandDetail');
+        const searchEl = document.getElementById('commandSearch');
+
+        function renderList(filter = '') {
+            const q = filter.trim().toLowerCase();
+            listEl.innerHTML = '';
+
+            const groups = ['raid', 'team', 'event', 'settings'];
+            let anyVisible = false;
+
+            groups.forEach((group) => {
+                const items = COMMANDS.filter((c) => c.group === group &&
+                    (!q || c.slash.toLowerCase().includes(q) || c.summary.toLowerCase().includes(q)));
+                if (items.length === 0) return;
+                anyVisible = true;
+
+                const label = document.createElement('div');
+                label.className = 'command-group-label';
+                label.textContent = `${GROUP_META[group].icon} ${GROUP_META[group].label}`;
+                listEl.appendChild(label);
+
+                items.forEach((cmd) => {
+                    const item = document.createElement('div');
+                    item.className = 'command-list-item';
+                    item.dataset.group = cmd.group;
+                    item.dataset.id = cmd.id;
+                    item.innerHTML = `<span class="slash">${cmd.slash}</span><span class="snippet">${cmd.summary}</span>`;
+                    item.addEventListener('click', () => selectCommand(cmd.id));
+                    listEl.appendChild(item);
+                });
+            });
+
+            if (!anyVisible) {
+                const empty = document.createElement('div');
+                empty.className = 'command-empty-state';
+                empty.textContent = 'No commands match your search.';
+                listEl.appendChild(empty);
+            }
+        }
+
+        function renderDetail(cmd) {
+            const optionRows = cmd.options.map((opt) => `
+                <tr>
+                    <td><code>${opt.name}</code></td>
+                    <td><span class="opt-badge ${opt.required ? 'required' : 'optional'}">${opt.required ? 'Required' : 'Optional'}</span></td>
+                    <td>${opt.details}</td>
+                </tr>
+            `).join('');
+
+            const notes = (cmd.notes || []).map((n) => `<div class="command-note">${n}</div>`).join('');
+
+            detailEl.innerHTML = `
+                <div class="command-detail-header">
+                    <span class="slash-badge" data-group="${cmd.group}">${GROUP_META[cmd.group].icon} ${cmd.slash}</span>
+                    <button class="copy-btn" id="copyBtn">Copy</button>
+                </div>
+                <p class="command-detail-summary">${cmd.summary}</p>
+                <table class="option-table">
+                    <thead>
+                        <tr><th>Option</th><th></th><th>Details</th></tr>
+                    </thead>
+                    <tbody>${optionRows}</tbody>
+                </table>
+                ${notes ? `<div class="command-notes">${notes}</div>` : ''}
+            `;
+
+            const copyBtn = document.getElementById('copyBtn');
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(cmd.slash).then(() => {
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1200);
+                });
+            });
+        }
+
+        function selectCommand(id) {
+            const cmd = COMMANDS.find((c) => c.id === id);
+            if (!cmd) return;
+
+            document.querySelectorAll('.command-list-item').forEach((el) => {
+                el.classList.toggle('active', el.dataset.id === id);
+            });
+
+            renderDetail(cmd);
+            history.replaceState(null, '', `#${id}`);
+        }
+
+        renderList();
+
+        searchEl.addEventListener('input', () => {
+            renderList(searchEl.value);
+            const stillActive = document.querySelector('.command-list-item.active');
+            if (!stillActive) {
+                const first = document.querySelector('.command-list-item');
+                if (first) selectCommand(first.dataset.id);
+                else detailEl.innerHTML = '<p style="color: var(--text-gray);">No command selected.</p>';
+            }
+        });
+
+        const initialId = COMMANDS.some((c) => c.id === location.hash.slice(1))
+            ? location.hash.slice(1)
+            : COMMANDS[0].id;
+        selectCommand(initialId);
+
+        // Scroll-reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+    </script>
 </body>
 </html>
