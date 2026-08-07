@@ -245,6 +245,7 @@
         .command-list-item[data-group="raid"].active { background: rgba(99, 102, 241, 0.14); border-left-color: var(--primary); }
         .command-list-item[data-group="team"].active { background: rgba(236, 72, 153, 0.14); border-left-color: var(--secondary); }
         .command-list-item[data-group="event"].active { background: rgba(20, 184, 166, 0.14); border-left-color: var(--accent); }
+        .command-list-item[data-group="close"].active { background: rgba(245, 158, 11, 0.14); border-left-color: #f59e0b; }
         .command-list-item[data-group="settings"].active { background: rgba(148, 163, 184, 0.14); border-left-color: var(--text-gray); }
 
         .command-empty-state {
@@ -291,6 +292,7 @@
         .slash-badge[data-group="raid"] { background: rgba(99, 102, 241, 0.15); color: var(--primary); }
         .slash-badge[data-group="team"] { background: rgba(236, 72, 153, 0.15); color: var(--secondary); }
         .slash-badge[data-group="event"] { background: rgba(20, 184, 166, 0.15); color: var(--accent); }
+        .slash-badge[data-group="close"] { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
         .slash-badge[data-group="settings"] { background: rgba(148, 163, 184, 0.15); color: var(--text-gray); }
 
         .copy-btn {
@@ -429,6 +431,7 @@
                 <span class="hero-badge">🤝 Teams</span>
                 <span class="hero-badge">📅 Events</span>
                 <span class="hero-badge">🌍 Per-viewer timezones</span>
+                <span class="hero-badge">📍 Optional location</span>
             </div>
             <div class="cta-buttons" style="margin-top: 1.75rem;">
                 <a href="../index.html" class="btn btn-primary">← Back to Home</a>
@@ -465,22 +468,17 @@
             <h3>Party formation <span style="color: var(--text-gray); font-weight: 400; font-size: 0.85rem;">— raids</span></h3>
             <p>
                 When a raid is closed, signups are bin-packed into parties by role, first-come-first-served, filling
-                one party completely for a role before spilling into the next:
+                one party completely for a role before spilling into the next. Parties are always
+                <strong>2 Tank / 2 Healer / 4 DPS</strong>.
             </p>
-            <table class="docs-table">
-                <thead>
-                    <tr><th>Size</th><th>Tank</th><th>Healer</th><th>DPS</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Small Party (4)</td><td>1</td><td>1</td><td>2</td></tr>
-                    <tr><td>Full Party (8)</td><td>2</td><td>2</td><td>4</td></tr>
-                    <tr><td>Alliance Raid (24)</td><td>6</td><td>6</td><td>12</td></tr>
-                </tbody>
-            </table>
             <p style="margin-top: 0.75rem;">
                 Half-empty final parties are fine — a new party only opens once the previous one is full for that
                 role.
             </p>
+            <div class="callout">
+                <span class="callout-icon">ℹ️</span>
+                <p>The party size you pick at creation (Small Party, Full Party, Alliance Raid) is currently just a label shown on the signup sheet — it doesn't change the 2/2/4 caps used when the raid is closed.</p>
+            </div>
         </div>
 
         <div class="docs-card reveal">
@@ -501,6 +499,34 @@
         </div>
 
         <div class="docs-card reveal">
+            <h3>Setting a location</h3>
+            <p>
+                When creating a raid, team, or event you can optionally say where it's happening — pick a
+                <strong>voice channel</strong>, or type a plain-text <strong>location</strong>. You only need one of
+                the two, not both — if a voice channel is set, the location text is ignored.
+            </p>
+            <ul>
+                <li>Leave both blank and, in the main Initiative server, the bot falls back to a default voice
+                    channel automatically.</li>
+                <li>If you also set a time, the bot creates a matching native Discord Scheduled Event — same
+                    title, time, image, and location — with a link back to the signup message, so it shows up on
+                    everyone's Discord calendar too.</li>
+                <li>No scheduled event is created if you didn't set a time (Discord requires a start time for
+                    those), and if the bot doesn't have the "Create Events" permission it just skips this step
+                    quietly — your signup sheet still gets posted either way.</li>
+            </ul>
+        </div>
+
+        <div class="docs-card reveal">
+            <h3>Finding an event by ID</h3>
+            <p>
+                Every <code>id</code> option — in <code>/close</code> and the <code>update</code> commands —
+                autocompletes. Start typing the event's title and Discord will suggest matching open events as
+                "#ID — Title" as you type. You can still type the raw number directly if you already know it.
+            </p>
+        </div>
+
+        <div class="docs-card reveal">
             <h3>Timezone-aware scheduling</h3>
             <p>
                 Raid, team, and event times are all entered the same way: a date, a time, and the organizer's own
@@ -511,7 +537,7 @@
             </p>
             <div class="callout">
                 <span class="callout-icon">💡</span>
-                <p>Whichever type you're creating, one command closes it: <code>/raid close</code> works for raids, teams, and events alike — see the Commands section below.</p>
+                <p>Whichever type you're creating, one command closes it: <code>/close</code> works for raids, teams, and events alike — see the Commands section below.</p>
             </div>
         </div>
     </section>
@@ -544,8 +570,16 @@
             raid: { label: 'Raid', icon: '🎲' },
             team: { label: 'Team', icon: '🤝' },
             event: { label: 'Event', icon: '📅' },
+            close: { label: 'Close', icon: '🔒' },
             settings: { label: 'Settings', icon: '⚙️' },
         };
+
+        const LOCATION_OPTIONS = [
+            { name: 'voice-channel', required: false, details: 'Voice channel to hold the Discord event in' },
+            { name: 'location', required: false, details: 'Location text — used only if no voice channel is set' },
+        ];
+
+        const LOCATION_NOTE = 'You only need voice-channel OR location, not both — voice-channel wins if you set both. Leave both blank and (in the main server) it falls back to a default voice channel.';
 
         const COMMANDS = [
             {
@@ -555,43 +589,37 @@
                 summary: 'Post a new raid signup sheet with role-based reactions.',
                 options: [
                     { name: 'title', required: true, details: 'Name of the raid event' },
-                    { name: 'size', required: true, details: 'Small Party (4), Full Party (8), or Alliance Raid (24)' },
+                    { name: 'size', required: true, details: 'Small Party (4), Full Party (8), or Alliance Raid (24) — a label only, see notes' },
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    ...LOCATION_OPTIONS,
                     { name: 'image', required: false, details: 'Banner image for the signup sheet' },
                 ],
                 notes: [
                     'If you set a time, date, time, and timezone must all be given together.',
+                    LOCATION_NOTE,
                     'The bot reacts with the Tank/Healer/DPS emoji automatically once the sheet is posted.',
+                    '/close always packs parties as 2 Tank / 2 Healer / 4 DPS regardless of the size you pick here — size is currently just a label.',
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
                 ],
             },
             {
-                id: 'raid-edit',
+                id: 'raid-update',
                 group: 'raid',
-                slash: '/raid edit',
+                slash: '/raid update',
                 summary: "Update a raid's title, time, size, or image after it's posted.",
                 options: [
-                    { name: 'id', required: true, details: 'Raid ID, shown in the footer of the signup embed' },
+                    { name: 'id', required: true, details: 'Which raid — start typing its title, or type its number directly' },
                     { name: 'title', required: false, details: 'New title' },
-                    { name: 'size', required: false, details: 'New party size' },
+                    { name: 'size', required: false, details: 'New party size label' },
                     { name: 'date / time / timezone', required: false, details: 'New raid time — give all three together to change it' },
                     { name: 'image', required: false, details: 'New banner image' },
                 ],
-                notes: ['Leave an option blank to keep it unchanged — only what you fill in gets updated.'],
-            },
-            {
-                id: 'raid-close',
-                group: 'raid',
-                slash: '/raid close',
-                summary: 'Close signups and show the results — the universal closer for raids, teams, and events.',
-                options: [
-                    { name: 'id', required: true, details: 'Event ID, shown in the footer of the signup embed' },
-                ],
                 notes: [
-                    'This is the one command that closes everything — raids, teams, and events all close with /raid close, there\'s no separate /team close or /event close.',
-                    'Raids form parties by role, teams get split into teams, and events just show the full attendee list.',
-                    'Results post to the channel set with /settings set-party-channel, or reply inline if none is set.',
+                    'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
+                    'The id field autocompletes as you type the raid\'s title.',
+                    'Location and voice channel can\'t be changed after creation — only set at /raid create.',
                 ],
             },
             {
@@ -605,11 +633,32 @@
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    ...LOCATION_OPTIONS,
                     { name: 'image', required: false, details: 'Banner image for the signup sheet' },
                 ],
                 notes: [
                     'Everyone reacts with the same ✅ — there are no roles to pick.',
-                    'Close it with /raid close to split signups into teams.',
+                    LOCATION_NOTE,
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
+                    'Close it with /close to split signups into teams.',
+                ],
+            },
+            {
+                id: 'team-update',
+                group: 'team',
+                slash: '/team update',
+                summary: "Update a team signup's title, team size, time, or image.",
+                options: [
+                    { name: 'id', required: true, details: 'Which team signup — start typing its title, or type its number directly' },
+                    { name: 'title', required: false, details: 'New title' },
+                    { name: 'team-size', required: false, details: 'New people-per-team size' },
+                    { name: 'date / time / timezone', required: false, details: 'New event time — give all three together to change it' },
+                    { name: 'image', required: false, details: 'New banner image' },
+                ],
+                notes: [
+                    'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
+                    'The id field autocompletes as you type the signup\'s title.',
+                    'Running this on a raid or event ID will tell you to use /raid update or /event update instead.',
                 ],
             },
             {
@@ -622,22 +671,56 @@
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
+                    ...LOCATION_OPTIONS,
                     { name: 'image', required: false, details: 'Banner image for the signup sheet' },
                 ],
                 notes: [
                     'Good for a simple "who\'s coming" list — react with ✅ to attend.',
-                    'Close it with /raid close to see the final attendee list.',
+                    LOCATION_NOTE,
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
+                    'Close it with /close to see the final attendee list.',
+                ],
+            },
+            {
+                id: 'event-update',
+                group: 'event',
+                slash: '/event update',
+                summary: "Update an event's title, time, or image.",
+                options: [
+                    { name: 'id', required: true, details: 'Which event — start typing its title, or type its number directly' },
+                    { name: 'title', required: false, details: 'New title' },
+                    { name: 'date / time / timezone', required: false, details: 'New event time — give all three together to change it' },
+                    { name: 'image', required: false, details: 'New banner image' },
+                ],
+                notes: [
+                    'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
+                    'The id field autocompletes as you type the event\'s title.',
+                ],
+            },
+            {
+                id: 'close',
+                group: 'close',
+                slash: '/close',
+                summary: 'Close signups and show the results — the universal closer for raids, teams, and events.',
+                options: [
+                    { name: 'id', required: true, details: 'Which one — start typing its title, or type its number directly' },
+                ],
+                notes: [
+                    'This is the one command that closes everything — raids, teams, and events all close with /close, there\'s no separate /team close or /event close.',
+                    'The id field autocompletes as you type the title of any open (not yet closed) signup.',
+                    'Raids form parties by role, teams get split into teams, and events just show the full attendee list.',
+                    'Results post to the channel set with /settings set-party-channel, or reply inline if none is set.',
                 ],
             },
             {
                 id: 'settings-set-party-channel',
                 group: 'settings',
                 slash: '/settings set-party-channel',
-                summary: 'Choose the channel where closed-sheet results get posted.',
+                summary: 'Choose the channel where /close results get posted.',
                 options: [
-                    { name: 'channel', required: true, details: 'Text channel for raid/team/event results' },
+                    { name: 'channel', required: true, details: 'Text channel for party/team/attendance results' },
                 ],
-                notes: ['Applies per server — set it once and every /raid close in that server posts its results there.'],
+                notes: ['Applies per server — set it once and every /close in that server posts its results there.'],
             },
         ];
 
@@ -649,7 +732,7 @@
             const q = filter.trim().toLowerCase();
             listEl.innerHTML = '';
 
-            const groups = ['raid', 'team', 'event', 'settings'];
+            const groups = ['raid', 'team', 'event', 'close', 'settings'];
             let anyVisible = false;
 
             groups.forEach((group) => {
