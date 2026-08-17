@@ -557,6 +557,10 @@
                 <code>description</code> field — plain text shown right in the signup embed. Handy for loot rules,
                 a strategy note, or anything else worth pinning above the roster.
             </p>
+            <div class="callout">
+                <span class="callout-icon">💡</span>
+                <p>Discord's slash-command text fields won't let you press Enter for a line break — type <code>\n</code> wherever you want one instead, and the bot converts it to a real line break in the embed.</p>
+            </div>
         </div>
 
         <div class="docs-card reveal">
@@ -641,7 +645,7 @@
 
         const LOCATION_NOTE = 'You only need voice-channel OR location, not both — voice-channel wins if you set both. Leave both blank and (in the main server) it falls back to a default voice channel.';
 
-        const DESCRIPTION_OPTION = { name: 'description', required: false, details: 'Extra free-text shown in the signup embed — loot rules, a strategy note, anything worth pinning above the roster' };
+        const DESCRIPTION_OPTION = { name: 'description', required: false, details: 'Extra free-text shown in the signup embed — loot rules, a strategy note, anything worth pinning above the roster. Type \\n where you want a line break.' };
 
         const SCOPE_NOTE = 'This raid/team/event is tied to the server it was created in — this command can only find it from that same server.';
 
