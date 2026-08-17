@@ -567,6 +567,11 @@
                 you've lost track of what's running.
             </p>
             <p style="margin-top: 0.75rem;">
+                <code>/held-events</code> is the wider view — it replies right in the channel (no DM) with
+                <em>everything</em> that's ever been posted in this server, open and closed, split into two lists so
+                you can see what already wrapped up too.
+            </p>
+            <p style="margin-top: 0.75rem;">
                 <code>/close</code> is how you normally finish something — it locks signups and posts the results.
                 <code>/delete</code> is different: it's for removing a signup sheet entirely, open or closed.
             </p>
@@ -825,6 +830,21 @@
                     'Sent as a direct message to you; if your DMs are closed to server members, you\'ll get a note instead telling you to open them.',
                     'Each entry shows the ID, type (Raid/Team/Event), title, scheduled time if one was set, and a link straight to the signup message.',
                     'Scoped to the server you run it in — only shows that server\'s open signups.',
+                ],
+            },
+            {
+                id: 'held-events',
+                group: 'info',
+                slash: '/held-events',
+                summary: 'Shows every raid, team, and event ever posted in this server — open and closed — split into two lists.',
+                description: 'The full history, not just what\'s live right now. Where /events is a quick "what\'s open" DM, /held-events replies right in the channel with both an Open list and a Closed list, so you can look back at things that already wrapped up too.',
+                options: [],
+                notes: [
+                    'Replies in the channel (ephemeral — only you see it), not as a DM like /events.',
+                    'Splits results into two groups: Open and Closed, each with its own count.',
+                    'Each entry shows the ID, type (Raid/Team/Event), title, scheduled time if one was set, and a link straight to the signup message — same format as /events.',
+                    'Discord caps each list at 1024 characters — if a server has a lot of history, the list gets trimmed with a note to use /events for the full open list.',
+                    'Scoped to the server you run it in — only shows that server\'s raids, teams, and events.',
                 ],
             },
             {
