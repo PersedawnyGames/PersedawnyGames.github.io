@@ -154,6 +154,11 @@
             margin: 0 !important;
         }
 
+        .callout-warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
         /* ===== Command Explorer ===== */
         .command-explorer {
             display: grid;
@@ -246,6 +251,8 @@
         .command-list-item[data-group="team"].active { background: rgba(236, 72, 153, 0.14); border-left-color: var(--secondary); }
         .command-list-item[data-group="event"].active { background: rgba(20, 184, 166, 0.14); border-left-color: var(--accent); }
         .command-list-item[data-group="close"].active { background: rgba(245, 158, 11, 0.14); border-left-color: #f59e0b; }
+        .command-list-item[data-group="delete"].active { background: rgba(239, 68, 68, 0.14); border-left-color: #ef4444; }
+        .command-list-item[data-group="info"].active { background: rgba(56, 189, 248, 0.14); border-left-color: #38bdf8; }
         .command-list-item[data-group="settings"].active { background: rgba(148, 163, 184, 0.14); border-left-color: var(--text-gray); }
 
         .command-empty-state {
@@ -262,6 +269,11 @@
             padding: 2rem;
             min-height: 360px;
             animation: detailFade 0.25s ease;
+            min-width: 0;
+        }
+
+        .command-detail * {
+            min-width: 0;
         }
 
         @keyframes detailFade {
@@ -293,6 +305,8 @@
         .slash-badge[data-group="team"] { background: rgba(236, 72, 153, 0.15); color: var(--secondary); }
         .slash-badge[data-group="event"] { background: rgba(20, 184, 166, 0.15); color: var(--accent); }
         .slash-badge[data-group="close"] { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .slash-badge[data-group="delete"] { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .slash-badge[data-group="info"] { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
         .slash-badge[data-group="settings"] { background: rgba(148, 163, 184, 0.15); color: var(--text-gray); }
 
         .copy-btn {
@@ -322,6 +336,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 0.75rem;
+            table-layout: fixed;
         }
 
         .option-table th, .option-table td {
@@ -331,6 +346,7 @@
             font-size: 0.9rem;
             color: var(--text-gray);
             vertical-align: top;
+            overflow-wrap: break-word;
         }
 
         .option-table th {
@@ -377,6 +393,8 @@
             font-size: 0.88rem;
             color: var(--text-gray);
             line-height: 1.6;
+            min-width: 0;
+            overflow-wrap: break-word;
         }
 
         .command-note::before {
@@ -520,10 +538,45 @@
         <div class="docs-card reveal">
             <h3>Finding an event by ID</h3>
             <p>
-                Every <code>id</code> option — in <code>/close</code> and the <code>update</code> commands —
-                autocompletes. Start typing the event's title and Discord will suggest matching open events as
-                "#ID — Title" as you type. You can still type the raw number directly if you already know it.
+                Every <code>id</code> option — in <code>/close</code>, <code>/delete</code>, and the
+                <code>update</code> commands — autocompletes. Start typing the event's title and Discord will
+                suggest matching open events as "#ID — Title" as you type. You can still type the raw number
+                directly if you already know it.
             </p>
+            <p style="margin-top: 0.75rem;">
+                Every raid, team, and event is also tied to the Discord server it was created in, so these lookups
+                can only ever find one from that same server — even if you type a raw ID that happens to belong to
+                a raid in a different server.
+            </p>
+        </div>
+
+        <div class="docs-card reveal">
+            <h3>Descriptions</h3>
+            <p>
+                Every <code>create</code> and <code>update</code> command has an optional
+                <code>description</code> field — plain text shown right in the signup embed. Handy for loot rules,
+                a strategy note, or anything else worth pinning above the roster.
+            </p>
+        </div>
+
+        <div class="docs-card reveal">
+            <h3>Listing &amp; deleting</h3>
+            <p>
+                <code>/events</code> DMs you a list of everything still open in the server — every raid, team, and
+                event with its ID, type, scheduled time, and a link straight to the signup message. Handy when
+                you've lost track of what's running.
+            </p>
+            <p style="margin-top: 0.75rem;">
+                <code>/close</code> is how you normally finish something — it locks signups and posts the results.
+                <code>/delete</code> is different: it's for removing a signup sheet entirely, open or closed.
+            </p>
+            <div class="callout callout-warning">
+                <span class="callout-icon">⚠️</span>
+                <p><strong>/delete is permanent.</strong> It deletes the signup message, cancels the linked Discord
+                    calendar event, and erases all of that sheet's signups — there's no confirmation prompt and no
+                    undo. Reach for <code>/close</code> to finish something properly; only use
+                    <code>/delete</code> to clean up a mistake.</p>
+            </div>
         </div>
 
         <div class="docs-card reveal">
@@ -571,55 +624,68 @@
             team: { label: 'Team', icon: '🤝' },
             event: { label: 'Event', icon: '📅' },
             close: { label: 'Close', icon: '🔒' },
+            delete: { label: 'Delete', icon: '🗑️' },
+            info: { label: 'Info', icon: '📋' },
             settings: { label: 'Settings', icon: '⚙️' },
         };
 
         const LOCATION_OPTIONS = [
-            { name: 'voice-channel', required: false, details: 'Voice channel to hold the Discord event in' },
-            { name: 'location', required: false, details: 'Location text — used only if no voice channel is set' },
+            { name: 'voice-channel', required: false, details: 'Voice channel to hold the linked Discord event in' },
+            { name: 'location', required: false, details: 'Plain-text location — used only if no voice channel is set' },
         ];
 
         const LOCATION_NOTE = 'You only need voice-channel OR location, not both — voice-channel wins if you set both. Leave both blank and (in the main server) it falls back to a default voice channel.';
+
+        const DESCRIPTION_OPTION = { name: 'description', required: false, details: 'Extra free-text shown in the signup embed — loot rules, a strategy note, anything worth pinning above the roster' };
+
+        const SCOPE_NOTE = 'This raid/team/event is tied to the server it was created in — this command can only find it from that same server.';
 
         const COMMANDS = [
             {
                 id: 'raid-create',
                 group: 'raid',
                 slash: '/raid create',
-                summary: 'Post a new raid signup sheet with role-based reactions.',
+                summary: 'Post a new raid signup sheet with role-based reactions for Tank, Healer, and DPS.',
+                description: 'The full raid workflow starts here. This posts an embed with a Tank/Healer/DPS breakdown that members react to, and — if you gave it a time — automatically creates a matching event on the server\'s Discord calendar so it shows up outside the channel too.',
                 options: [
-                    { name: 'title', required: true, details: 'Name of the raid event' },
-                    { name: 'size', required: true, details: 'Small Party (4), Full Party (8), or Alliance Raid (24) — a label only, see notes' },
+                    { name: 'title', required: true, details: 'Name of the raid event, shown as the embed title and (if scheduled) the calendar event name' },
+                    { name: 'size', required: true, details: 'Small Party (4), Full Party (8), or Alliance Raid (24) — a display label only, see notes' },
+                    DESCRIPTION_OPTION,
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
                     ...LOCATION_OPTIONS,
-                    { name: 'image', required: false, details: 'Banner image for the signup sheet' },
+                    { name: 'image', required: false, details: 'Banner image for the signup sheet (and the calendar event, if one is created)' },
                 ],
                 notes: [
-                    'If you set a time, date, time, and timezone must all be given together.',
+                    'If you set a time, date, time, and timezone must all be given together — partial time info is rejected.',
                     LOCATION_NOTE,
-                    'The bot reacts with the Tank/Healer/DPS emoji automatically once the sheet is posted.',
-                    '/close always packs parties as 2 Tank / 2 Healer / 4 DPS regardless of the size you pick here — size is currently just a label.',
-                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
+                    'The bot reacts with the Tank/Healer/DPS emoji automatically once the sheet is posted, so members can sign up right away.',
+                    '/close always packs parties as 2 Tank / 2 Healer / 4 DPS regardless of the size you pick here — size is currently just a label, not an enforced cap.',
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically, linking back to this signup message. Skipped quietly if the bot lacks the "Create Events" permission.',
+                    SCOPE_NOTE,
                 ],
             },
             {
                 id: 'raid-update',
                 group: 'raid',
                 slash: '/raid update',
-                summary: "Update a raid's title, time, size, or image after it's posted.",
+                summary: "Change a posted raid's title, description, time, size, or image without resetting signups.",
+                description: 'Use this to fix a typo, push back a start time, or swap the banner after the fact — everyone already signed up keeps their spot and their role.',
                 options: [
-                    { name: 'id', required: true, details: 'Which raid — start typing its title, or type its number directly' },
+                    { name: 'id', required: true, details: 'Which raid — start typing its title for suggestions, or type its number directly' },
                     { name: 'title', required: false, details: 'New title' },
                     { name: 'size', required: false, details: 'New party size label' },
+                    DESCRIPTION_OPTION,
                     { name: 'date / time / timezone', required: false, details: 'New raid time — give all three together to change it' },
                     { name: 'image', required: false, details: 'New banner image' },
                 ],
                 notes: [
                     'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
                     'The id field autocompletes as you type the raid\'s title.',
-                    'Location and voice channel can\'t be changed after creation — only set at /raid create.',
+                    'If this raid has a linked Discord Scheduled Event, its title/time/image are kept in sync automatically — but its location can\'t be changed after creation, only set at /raid create.',
+                    'Running this on a team or event ID tells you to use /team update or /event update instead.',
+                    SCOPE_NOTE,
                 ],
             },
             {
@@ -627,9 +693,11 @@
                 group: 'team',
                 slash: '/team create',
                 summary: 'Post a new team signup sheet — no roles, just one join reaction.',
+                description: 'For anything that just needs people split into even groups — a scrimmage, a tournament bracket, a game night — without the Tank/Healer/DPS structure a raid has.',
                 options: [
                     { name: 'title', required: true, details: 'Name of the event' },
-                    { name: 'size', required: false, details: 'People per team — omit to split everyone evenly into 2 teams' },
+                    { name: 'size', required: false, details: 'People per team — omit to split everyone evenly into exactly 2 teams' },
+                    DESCRIPTION_OPTION,
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
@@ -639,35 +707,42 @@
                 notes: [
                     'Everyone reacts with the same ✅ — there are no roles to pick.',
                     LOCATION_NOTE,
-                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically, linking back to this signup message.',
                     'Close it with /close to split signups into teams.',
+                    SCOPE_NOTE,
                 ],
             },
             {
                 id: 'team-update',
                 group: 'team',
                 slash: '/team update',
-                summary: "Update a team signup's title, team size, time, or image.",
+                summary: "Change a posted team signup's title, description, team size, time, or image.",
+                description: 'Same idea as /raid update, but for team signups — adjust the details without touching who\'s already joined.',
                 options: [
-                    { name: 'id', required: true, details: 'Which team signup — start typing its title, or type its number directly' },
+                    { name: 'id', required: true, details: 'Which team signup — start typing its title for suggestions, or type its number directly' },
                     { name: 'title', required: false, details: 'New title' },
                     { name: 'team-size', required: false, details: 'New people-per-team size' },
+                    DESCRIPTION_OPTION,
                     { name: 'date / time / timezone', required: false, details: 'New event time — give all three together to change it' },
                     { name: 'image', required: false, details: 'New banner image' },
                 ],
                 notes: [
                     'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
                     'The id field autocompletes as you type the signup\'s title.',
-                    'Running this on a raid or event ID will tell you to use /raid update or /event update instead.',
+                    'If this signup has a linked Discord Scheduled Event, its title/time/image are kept in sync automatically.',
+                    'Running this on a raid or event ID tells you to use /raid update or /event update instead.',
+                    SCOPE_NOTE,
                 ],
             },
             {
                 id: 'event-create',
                 group: 'event',
                 slash: '/event create',
-                summary: 'Post a plain attendance sheet — no roles, no teams.',
+                summary: 'Post a plain attendance sheet — no roles, no teams, just a headcount.',
+                description: 'The simplest signup type — use it for anything where you just need to know who\'s showing up, with nothing to group afterward.',
                 options: [
                     { name: 'title', required: true, details: 'Name of the event' },
+                    DESCRIPTION_OPTION,
                     { name: 'date', required: false, details: 'Date, as DD-MM-YYYY' },
                     { name: 'time', required: false, details: 'Time, 24h as HH:MM' },
                     { name: 'timezone', required: false, details: 'Your timezone, so the time shows correctly for everyone else' },
@@ -677,24 +752,29 @@
                 notes: [
                     'Good for a simple "who\'s coming" list — react with ✅ to attend.',
                     LOCATION_NOTE,
-                    'If you also set a time, a matching Discord Scheduled Event is created automatically.',
+                    'If you also set a time, a matching Discord Scheduled Event is created automatically, linking back to this signup message.',
                     'Close it with /close to see the final attendee list.',
+                    SCOPE_NOTE,
                 ],
             },
             {
                 id: 'event-update',
                 group: 'event',
                 slash: '/event update',
-                summary: "Update an event's title, time, or image.",
+                summary: "Change a posted event's title, description, time, or image.",
+                description: 'Fix details on an event after the fact without disturbing who\'s already marked themselves as attending.',
                 options: [
-                    { name: 'id', required: true, details: 'Which event — start typing its title, or type its number directly' },
+                    { name: 'id', required: true, details: 'Which event — start typing its title for suggestions, or type its number directly' },
                     { name: 'title', required: false, details: 'New title' },
+                    DESCRIPTION_OPTION,
                     { name: 'date / time / timezone', required: false, details: 'New event time — give all three together to change it' },
                     { name: 'image', required: false, details: 'New banner image' },
                 ],
                 notes: [
                     'Leave an option blank to keep it unchanged — only what you fill in gets updated.',
                     'The id field autocompletes as you type the event\'s title.',
+                    'If this event has a linked Discord Scheduled Event, its title/time/image are kept in sync automatically.',
+                    SCOPE_NOTE,
                 ],
             },
             {
@@ -702,14 +782,49 @@
                 group: 'close',
                 slash: '/close',
                 summary: 'Close signups and show the results — the universal closer for raids, teams, and events.',
+                description: 'This is how you finish something properly: it locks the sheet so no more reactions count, then posts the outcome — parties, teams, or an attendee list depending on what type it is. The original signup message is also updated to show it\'s closed.',
                 options: [
-                    { name: 'id', required: true, details: 'Which one — start typing its title, or type its number directly' },
+                    { name: 'id', required: true, details: 'Which one — start typing its title for suggestions, or type its number directly' },
                 ],
                 notes: [
                     'This is the one command that closes everything — raids, teams, and events all close with /close, there\'s no separate /team close or /event close.',
-                    'The id field autocompletes as you type the title of any open (not yet closed) signup.',
+                    'The id field autocompletes as you type the title of any open (not yet closed) signup in this server.',
                     'Raids form parties by role, teams get split into teams, and events just show the full attendee list.',
                     'Results post to the channel set with /settings set-party-channel, or reply inline if none is set.',
+                    'Running it again on an already-closed sheet just tells you it\'s already closed — it won\'t re-form parties or double-post results.',
+                    SCOPE_NOTE,
+                ],
+            },
+            {
+                id: 'delete',
+                group: 'delete',
+                slash: '/delete',
+                summary: 'Permanently delete a raid, team, or event — the signup message, its calendar event, and all signups.',
+                description: 'For cleaning up a mistake, not for finishing a signup — use /close for that instead. /delete removes everything tied to a sheet: the posted message in the channel, the linked Discord Scheduled Event if one was created, and all of the stored signup data. It works whether the sheet is still open or already closed.',
+                options: [
+                    { name: 'id', required: true, details: 'Which one — start typing its title for suggestions, or type its number directly' },
+                ],
+                warning: 'This is permanent. There\'s no confirmation prompt and no undo — the moment you run /delete, the signup message, everyone\'s signups, and the linked Discord calendar event (if any) are gone for good. Double-check you\'ve picked the right id before hitting enter.',
+                notes: [
+                    'Deletes the posted signup message from its channel — if it was already removed some other way, this step is skipped quietly.',
+                    'Cancels the linked Discord Scheduled Event too, if this raid/team/event had one.',
+                    'Works on open or already-closed signups alike.',
+                    'The id field autocompletes as you type a title, same as /close.',
+                    SCOPE_NOTE,
+                ],
+            },
+            {
+                id: 'events',
+                group: 'info',
+                slash: '/events',
+                summary: 'DMs you a list of every open raid, team, and event in this server, with a jump link to each.',
+                description: 'A quick way to see what\'s currently running without hunting through channels — useful when you\'ve lost track of IDs or just want an overview before running /close or /delete on something.',
+                options: [],
+                notes: [
+                    'Only lists open (not yet closed) signups — closed ones drop off the list.',
+                    'Sent as a direct message to you; if your DMs are closed to server members, you\'ll get a note instead telling you to open them.',
+                    'Each entry shows the ID, type (Raid/Team/Event), title, scheduled time if one was set, and a link straight to the signup message.',
+                    'Scoped to the server you run it in — only shows that server\'s open signups.',
                 ],
             },
             {
@@ -717,10 +832,15 @@
                 group: 'settings',
                 slash: '/settings set-party-channel',
                 summary: 'Choose the channel where /close results get posted.',
+                description: 'By default, /close just replies in the channel it was run in. Setting a party channel instead sends the formed parties, teams, or attendee list to a fixed channel every time, so results always land somewhere predictable.',
                 options: [
                     { name: 'channel', required: true, details: 'Text channel for party/team/attendance results' },
                 ],
-                notes: ['Applies per server — set it once and every /close in that server posts its results there.'],
+                notes: [
+                    'Applies per server — set it once and every /close in that server posts its results there.',
+                    'Must be a text channel; voice channels aren\'t offered as options.',
+                    'Re-running this command with a different channel overwrites the previous setting.',
+                ],
             },
         ];
 
@@ -732,7 +852,7 @@
             const q = filter.trim().toLowerCase();
             listEl.innerHTML = '';
 
-            const groups = ['raid', 'team', 'event', 'close', 'settings'];
+            const groups = ['raid', 'team', 'event', 'close', 'delete', 'info', 'settings'];
             let anyVisible = false;
 
             groups.forEach((group) => {
@@ -774,6 +894,26 @@
                 </tr>
             `).join('');
 
+            const optionsBlock = cmd.options.length
+                ? `<table class="option-table">
+                        <thead>
+                            <tr><th>Option</th><th></th><th>Details</th></tr>
+                        </thead>
+                        <tbody>${optionRows}</tbody>
+                   </table>`
+                : `<p style="color: var(--text-gray); font-size: 0.9rem; font-style: italic;">No options — just run the command.</p>`;
+
+            const warningBlock = cmd.warning
+                ? `<div class="callout callout-warning">
+                        <span class="callout-icon">⚠️</span>
+                        <p><strong>Warning:</strong> ${cmd.warning}</p>
+                   </div>`
+                : '';
+
+            const descriptionBlock = cmd.description
+                ? `<p class="command-detail-summary" style="margin-bottom: 1rem;">${cmd.description}</p>`
+                : '';
+
             const notes = (cmd.notes || []).map((n) => `<div class="command-note">${n}</div>`).join('');
 
             detailEl.innerHTML = `
@@ -781,13 +921,10 @@
                     <span class="slash-badge" data-group="${cmd.group}">${GROUP_META[cmd.group].icon} ${cmd.slash}</span>
                     <button class="copy-btn" id="copyBtn">Copy</button>
                 </div>
-                <p class="command-detail-summary">${cmd.summary}</p>
-                <table class="option-table">
-                    <thead>
-                        <tr><th>Option</th><th></th><th>Details</th></tr>
-                    </thead>
-                    <tbody>${optionRows}</tbody>
-                </table>
+                <p class="command-detail-summary"><strong>${cmd.summary}</strong></p>
+                ${descriptionBlock}
+                ${warningBlock}
+                ${optionsBlock}
                 ${notes ? `<div class="command-notes">${notes}</div>` : ''}
             `;
 
